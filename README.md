@@ -12,4 +12,39 @@ This outlines the initial design and goals for building a lightweight, modular a
 * Minimal external dependencies initially
 * Easily testable and observable
 
+## Phase 1 Scope
+The initial version will support:
+* A single ad format (e.g., 300x250 display banner)
+* Direct connections to a small set of mock bidders
+* A basic auction mechanism (e.g., highest bid wins)
+* Basic logging and request tracing
 
+## Components
+### Request Handler
+* Entry point for HTTP requests to the ad server
+* Parses ad request parameters (site ID, user ID, placement ID, etc)
+* Enforces any basic validation and filtering
+### Auction Engine
+* Responsible for managing the auction lifecycle
+* Receives valid bid requests from the handler
+* Calls out to mock bidders
+* Evaluates bids and determines the winner
+### Bidder Interface (Mock)
+* Simulated endpoints that represent demand partners
+* Return bid responses based on simple logic or randomness
+* Eventuall replaced or extended with real DSPs and/or SSPs
+### Response Builder
+* Constructs a final ad response to the client
+* Includes ad markup, tracking URLs and bid metadata
+### Logging and Monitoring
+* Structured logging for auction events
+* Basic metrics (e.g., request count, avg response time, win rate)
+* Hooks for future integration with observability tools like Prometheus or OpenTelemetry
+
+## Request Flow
+1. Client makes a request to `/ad` endpoint with parameters
+2. Request handler validates and constructs an internal bid request object
+3. Auction engine calls mock bidders concurrently
+4. Bids are collected, evaluated and the winner is selected
+5. Response is built and returned to the client
+6. Logs are written and metrics are updated.
