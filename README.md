@@ -48,3 +48,21 @@ The initial version will support:
 4. Bids are collected, evaluated and the winner is selected
 5. Response is built and returned to the client
 6. Logs are written and metrics are updated.
+
+## Future Roadmap
+* Support for multiple formats (video, native)
+* User targeting & segmentation
+* Header bidding support
+* Integration with external DSPs and ad exchanges
+* Real-time logging dashboard
+* Throttling and rate limiting
+
+## Open Questions
+* What is the latency budget we want to guarantee at scale?
+* Will we support cookie-based or server-side user IDs?
+* Do we want to simulate auctions with floors and timeouts in Phase 1?
+* How will inventory be defined and matched (placement ID vs site ID)?
+
+## Appendix
+* Placeholder bidder response JSON format
+* Sample HTTP request and response structures
