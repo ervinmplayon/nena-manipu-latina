@@ -1,6 +1,16 @@
 # nena-manipu-latina
 Nena Manipulatina: High Concurrency Ad Server
 
+## Table of Contents
+[Overview](#overview)  
+[Goals](#goals)  
+[Phase 1 Scope](#phase-1-scope)  
+[Components](#components)  
+[Request Flow](#request-flow)  
+[Future Roadmap](#future-roadmap)  
+[Open Questions](#open-questions)    
+[Appendix](#appendix)  
+
 ## Overview
 This outlines the initial design and goals for building a lightweight, modular ad server capable fo conducting real-time auctions for ad impressions. This part will serve as a blueprint before implementation. Requirements will include: high concurrency, scalability and demand-side integrations. 
 
