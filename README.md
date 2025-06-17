@@ -6,7 +6,8 @@ Nena Manipulatina: High Concurrency Ad Server
 [Goals](#goals)  
 [Phase 1 Scope](#phase-1-scope)  
 [Components](#components)  
-[Request Flow](#request-flow)  
+[Technical Requirements](#technical-requirements)  
+[Request Flow](#basic-request-auction-flow)  
 [Future Roadmap](#future-roadmap)  
 [Open Questions](#open-questions)    
 [Appendix](#appendix)  
@@ -67,7 +68,14 @@ The initial version will support:
 * Basic metrics (e.g., request count, avg response time, win rate)
 * Hooks for future integration with observability tools like Prometheus or OpenTelemetry
 
-## Request Flow
+## Technical Requirements
+* Language: Go for performance and native concurrency support
+* Data stores: TDB, Redis caching, PgSQL or NoSQL for event logs
+* Deployment: Docker for containerization, Kubernetes for orchestration
+* Networking: HTTP-based APIs, eventual gRPC support between internal modules
+* Concurrency Model: Will leverage goroutines, rate limiters and sync primitives. 
+
+## Basic Request-Auction Flow
 1. Client makes a request to `/ad` endpoint with parameters
 2. Request handler validates and constructs an internal bid request object, enriches context (e.g., geo)
 3. Auction engine calls out to all bidders and mock bidders concurrently within a timeout.
