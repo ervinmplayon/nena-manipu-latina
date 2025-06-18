@@ -97,6 +97,8 @@ The initial version will support:
 * Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
 * Compose auction strategies and decorators
 * Use interfaces for creative renderers, response transformers and loggers. 
+### Logging
+* Reuse logging library created by my genius ass.
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
