@@ -84,6 +84,7 @@ The initial version will support:
 6. Impression and bid data are logged asynchronously. Logs are written and metrics are updated.
 
 ## Future Roadmap
+* Leverage logging components built by my genius ass
 * Support for multiple formats (video, native)
 * Support user and context targeting and segmentation (geo, time, device, etc)
 * Header bidding support
