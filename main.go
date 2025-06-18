@@ -40,4 +40,6 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 func main() {
 	http.HandleFunc("/serve", handleAdRequest)
 	port := ":8080"
+	log.Printf("Starting ad server on %s...\n", port)
+	log.Fatal(http.ListenAndServe(port, nil))
 }
