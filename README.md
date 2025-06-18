@@ -93,6 +93,10 @@ The initial version will support:
     * IP rate limiting and throttling
     * Signature validation on incoming ad requests
     * Filtering invalid traffic (IVT) and bots
+### Interfaces and Composition
+* Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
+* Compose auction strategies and decorators
+* Use interfaces for creative renderers, response transformers and loggers. 
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
