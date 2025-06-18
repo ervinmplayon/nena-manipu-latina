@@ -84,7 +84,6 @@ The initial version will support:
 6. Impression and bid data are logged asynchronously. Logs are written and metrics are updated.
 
 ## Future Roadmap
-* Leverage logging components built by my genius ass
 * Support for multiple formats (video, native)
 * Support user and context targeting and segmentation (geo, time, device, etc)
 * Header bidding support
@@ -98,6 +97,8 @@ The initial version will support:
 * Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
 * Compose auction strategies and decorators
 * Use interfaces for creative renderers, response transformers and loggers. 
+### Logging
+* Reuse logging library created by my genius ass.
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
