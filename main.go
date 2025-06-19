@@ -17,13 +17,6 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
 
 	if r.Method != http.MethodPost {
-		/*
-		 * We are literally learning on the fly here
-		 * TODO: (move me somewhere like in a bible and give me dignity, wicked sorcerer)
-		 * IT is a standard paractive to log errors like malfromed requests.
-		 * `http.Error` writes the response to the client - but it doesn't tell now us (the server)
-		 * now does it? This is where the logger comes in.
-		 */
 		eight_ball_logger.Error(fmt.Sprintf("Invalid method: %s", r.Method))
 		http.Error(w, "Only POST is allowed", http.StatusMethodNotAllowed)
 		return
@@ -36,16 +29,7 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	/*
-	 * TODO: Same. Add to my book of spells. Goddamn Im a sorcerer.
-	 * %s String-> This verb is specifically used for printing string values. When I use %s
-	 * with avariable that is not a string, Go will attempt to convert it to a string
-	 * representation if possible.
-	 * %v Value -> This is a general-purpose format verb that prints the value in its default format.
-	 * It can be used for any data type and Go will determine the appropriate representation based on
-	 * its type. AKA structs are printed with their field values.
-	 */
-	//eight_ball_logger.Info(fmt.Sprintf("Received Request: %v\n", adReq))
+	eight_ball_logger.Info(fmt.Sprintf("Received Request: %v\n", adReq))
 
 	// TODO: Auction, creative, logging
 	adResp := models.AdResponse{
