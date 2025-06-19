@@ -112,3 +112,6 @@ The initial version will support:
 ## Appendix
 * Placeholder bidder response JSON format
 * Sample HTTP request and response structures
+
+## Versions
+Current: v0.1.0
