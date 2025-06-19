@@ -98,7 +98,7 @@ The initial version will support:
 * Compose auction strategies and decorators
 * Use interfaces for creative renderers, response transformers and loggers. 
 ### Logging
-* Reuse logging library created by my genius ass.
+- [x] Reuse logging library created by my genius ass.
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
