@@ -94,11 +94,14 @@ The initial version will support:
     * Signature validation on incoming ad requests
     * Filtering invalid traffic (IVT) and bots
 ### Interfaces and Composition
-* Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
-* Compose auction strategies and decorators
-* Use interfaces for creative renderers, response transformers and loggers. 
+- [ ] Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
+- [ ] Compose auction strategies and decorators
+- [ ] Use interfaces for creative renderers, response transformers and loggers. 
+- [ ] Use composition for response builders or decorators
 ### Logging
 - [x] Reuse logging library created by my genius ass.
+- [ ] Inject logger into specific components (auction engine)
+- [ ] Support structured logging (e.g., with fields for request ID, latency)
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
