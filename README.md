@@ -94,7 +94,7 @@ The initial version will support:
     * Signature validation on incoming ad requests
     * Filtering invalid traffic (IVT) and bots
 ### Interfaces and Composition
-- [ ] Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
+- [x] Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
 - [ ] Compose auction strategies and decorators
 - [ ] Use interfaces for creative renderers, response transformers and loggers. 
 - [ ] Use composition for response builders or decorators
@@ -102,11 +102,13 @@ The initial version will support:
 - [x] Reuse logging library created by my genius ass.
 - [ ] Inject logger into specific components (auction engine)
 - [ ] Support structured logging (e.g., with fields for request ID, latency)
+- [ ] Add logging when a bid is filtered out
 ### Bidder
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
 ### Auction
 - [ ] Compose Auction Entry Point
+- [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
