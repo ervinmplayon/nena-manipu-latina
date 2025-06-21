@@ -102,6 +102,11 @@ The initial version will support:
 - [x] Reuse logging library created by my genius ass.
 - [ ] Inject logger into specific components (auction engine)
 - [ ] Support structured logging (e.g., with fields for request ID, latency)
+### Bidder
+- [ ] Implement Basic Bidder logic to return actual bid
+- [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
+### Auction
+- [ ] Compose Auction Entry Point
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?

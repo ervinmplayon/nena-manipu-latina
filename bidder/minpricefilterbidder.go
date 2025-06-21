@@ -1,7 +1,10 @@
 // ? Minumum Price Filter Bidder decorator
 package bidder
 
-import "nena-manipu-latina/models"
+import (
+	"nena-manipu-latina/models"
+	"strconv"
+)
 
 type MinPriceBidder struct {
 	Inner    Bidder
@@ -10,8 +13,10 @@ type MinPriceBidder struct {
 
 func (m *MinPriceBidder) Bid(req models.AdRequest) models.AdResponse {
 	res := m.Inner.Bid(req)
-	if res.CPM < m.MinPrice {
-		return models.AdResponse{} // empty = no bid
+	cpm, err := strconv.ParseFloat(res.CPM, 64)
+	if err != nil || cpm < m.MinPrice {
+		// Return empty response if invalid or too low
+		return models.AdResponse{}
 	}
 	return res
 }

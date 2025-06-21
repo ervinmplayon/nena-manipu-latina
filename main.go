@@ -34,7 +34,7 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	// TODO: Auction, creative, logging
 	adResp := models.AdResponse{
 		AdMarkup: "<div>Your AD Here</div>",
-		CPM:      1.25,
+		CPM:      "1.25",
 		Bidder:   "mock-bidder",
 	}
 
