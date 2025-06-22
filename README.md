@@ -102,13 +102,15 @@ The initial version will support:
 - [ ] Inject logger into specific components (auction engine)
 - [ ] Support structured logging (e.g., with fields for request ID, latency)
 - [ ] Add logging when a bid is filtered out
+- [ ] Add loigging during auction decisions
 ### Bidder
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
 ### Auction
-- [ ] Compose auction strategies and decorators
+- [x] Compose auction strategies and decorators
 - [ ] Compose Auction Entry Point
 - [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
+- [ ] Use a factory or congig-based strategy loader
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
