@@ -95,7 +95,6 @@ The initial version will support:
     * Filtering invalid traffic (IVT) and bots
 ### Interfaces and Composition
 - [x] Define `Bidder` as an interface (`type Bidder interface { Bid(req AdRequest) AdResponse }`)
-- [ ] Compose auction strategies and decorators
 - [ ] Use interfaces for creative renderers, response transformers and loggers. 
 - [ ] Use composition for response builders or decorators
 ### Logging
@@ -107,6 +106,7 @@ The initial version will support:
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
 ### Auction
+- [ ] Compose auction strategies and decorators
 - [ ] Compose Auction Entry Point
 - [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
 
