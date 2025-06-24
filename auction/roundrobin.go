@@ -3,23 +3,18 @@ package auction
 
 import (
 	"nena-manipu-latina/models"
-	"sync"
+	"sync/atomic"
 )
 
 type RoundRobin struct {
-	mu    sync.Mutex
-	index int
+	index atomic.Uint64
 }
 
-func (rr *RoundRobin) Auction(bids []models.AdResponse) models.AdResponse {
-	rr.mu.Lock()
-	defer rr.mu.Unlock()
-
+func (rr *RoundRobin) Auction(bids []models.AdResponse, req models.AdRequest) models.AdResponse {
 	if len(bids) == 0 {
 		return models.AdResponse{}
 	}
-
-	selected := bids[rr.index%len(bids)]
-	rr.index++
+	i := rr.index.Add(1)
+	selected := bids[i%uint64(len(bids))]
 	return selected
 }
