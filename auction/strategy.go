@@ -1,8 +1,11 @@
 package auction
 
-import "nena-manipu-latina/models"
+import (
+	"nena-manipu-latina/bidder"
+	"nena-manipu-latina/models"
+)
 
 type AuctionStrategy interface {
 	// ? this will make sense as an auction takes ad responses and have 1 ad win
-	Auction([]models.AdResponse) models.AdResponse
+	Auction(bids []bidder.Bidder, req models.AdRequest) models.AdResponse
 }
