@@ -21,7 +21,7 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) mo
 	// ? this can block forever, adding a timeout.
 	select {
 	case res := <-resCh:
-		return res
+		return res // * first to respond wins
 	case <-time.After(10 * time.Millisecond):
 		return models.AdResponse{} // * fallback / timeout
 	}
