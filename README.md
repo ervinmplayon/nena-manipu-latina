@@ -113,6 +113,13 @@ The initial version will support:
 - [ ] Compose Auction Entry Point
 - [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
 - [ ] Use a factory or config-based strategy loader
+### TODO 6/24/25
+- [ ] auction/factory.go strat factory that selects the strat
+- [ ] auction/runner.go entry point for auction runner
+- [ ] Factory for selecting strategy dynamically
+- [ ] Metadata-driven config structure
+- [ ] Auction entry point with logging
+- [ ] Future-ready for runtime updates (Admin UI)
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
