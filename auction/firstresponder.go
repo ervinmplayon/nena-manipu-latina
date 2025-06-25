@@ -5,6 +5,7 @@ package auction
 import (
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
+	"time"
 )
 
 type FirstResponder struct{}
@@ -16,5 +17,12 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) mo
 			resCh <- bidder.Bid(req)
 		}(bb)
 	}
-	return <-resCh
+	// ? In production, I want to protect against dead bidders. If a bidder does not respond,
+	// ? this can block forever, adding a timeout.
+	select {
+	case res := <-resCh:
+		return res
+	case <-time.After(10 * time.Millisecond):
+		return models.AdResponse{} // * fallback / timeout
+	}
 }
