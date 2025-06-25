@@ -2,6 +2,7 @@
 package auction
 
 import (
+	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"sync/atomic"
 )
@@ -10,7 +11,7 @@ type RoundRobin struct {
 	index atomic.Uint64
 }
 
-func (rr *RoundRobin) Auction(bids []models.AdResponse, req models.AdRequest) models.AdResponse {
+func (rr *RoundRobin) Auction(bids []bidder.Bidder, req models.AdRequest) models.AdResponse {
 	if len(bids) == 0 {
 		return models.AdResponse{}
 	}

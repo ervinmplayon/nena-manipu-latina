@@ -2,13 +2,19 @@
 // ? Picks the first valid bid
 package auction
 
-import "nena-manipu-latina/models"
+import (
+	"nena-manipu-latina/bidder"
+	"nena-manipu-latina/models"
+)
 
 type FirstResponder struct{}
 
-func (fr *FirstResponder) Auction(bids []models.AdResponse) models.AdResponse {
-	if len(bids) == 0 {
-		return models.AdResponse{}
+func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) models.AdResponse {
+	resCh := make(chan models.AdResponse, len(bids))
+	for _, b := range bids {
+		go func(bid bidder.Bidder) {
+			resCh <- bid.Bid(req)
+		}(b)
 	}
-	return bids[0]
+	return <-resCh
 }
