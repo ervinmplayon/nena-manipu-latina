@@ -18,7 +18,7 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) mo
 		}(bb)
 	}
 	// ? In production, I want to protect against dead bidders. If a bidder does not respond,
-	// ? this can block forever, adding a timeout.
+	// ? this can block forever, adding a timeout aks Defensive Handling
 	select {
 	case res := <-resCh:
 		return res // * first to respond wins
