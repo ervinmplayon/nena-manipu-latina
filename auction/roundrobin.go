@@ -17,5 +17,5 @@ func (rr *RoundRobin) Auction(bids []bidder.Bidder, req models.AdRequest) models
 	}
 	i := rr.index.Add(1)
 	selected := bids[i%uint64(len(bids))]
-	return selected
+	return selected.Bid(req)
 }
