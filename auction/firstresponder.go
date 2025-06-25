@@ -11,10 +11,10 @@ type FirstResponder struct{}
 
 func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) models.AdResponse {
 	resCh := make(chan models.AdResponse, len(bids))
-	for _, b := range bids {
-		go func(bid bidder.Bidder) {
-			resCh <- bid.Bid(req)
-		}(b)
+	for _, bb := range bids {
+		go func(bidder bidder.Bidder) {
+			resCh <- bidder.Bid(req)
+		}(bb)
 	}
 	return <-resCh
 }
