@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"nena-manipu-latina/auction"
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"net/http"
@@ -39,12 +40,8 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 
 	eight_ball_logger.Info(fmt.Sprintf("Received Request: %v\n", adReq))
 
-	// TODO: Auction, creative, logging
-	adResp := models.AdResponse{
-		AdMarkup: "<div>Your AD Here</div>",
-		CPM:      1.25,
-		Bidder:   "mock-bidder",
-	}
+	// ? Auction entry point
+	adResp := auction.RunAuction(bidders, adReq)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(adResp)
