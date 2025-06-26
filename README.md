@@ -114,11 +114,11 @@ The initial version will support:
 - [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
 - [ ] Use a factory or config-based strategy loader
 ### TODO 6/24/25
-- [ ] auction/factory.go strat factory that selects the strat
-- [ ] auction/runner.go entry point for auction runner
-- [ ] Factory for selecting strategy dynamically
+- [x] auction/factory.go strat factory that selects the strat
+- [x] auction/runner.go entry point for auction runner
+- [x] Factory for selecting strategy dynamically
 - [ ] Metadata-driven config structure
-- [ ] Auction entry point with logging
+- [x] Auction entry point with logging
 - [ ] Future-ready for runtime updates (Admin UI)
 
 ## Open Questions
