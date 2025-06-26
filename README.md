@@ -99,20 +99,23 @@ The initial version will support:
 - [ ] Use composition for response builders or decorators
 ### Logging
 - [x] Reuse logging library created by my genius ass.
-- [ ] Inject logger into specific components (auction engine)
+- [x] Inject logger into specific components (auction engine)
 - [ ] Support structured logging (e.g., with fields for request ID, latency)
 - [ ] Add logging when a bid is filtered out
-- [ ] Add logging during auction decisions
-- [ ] Add logging for which strategy decision was used and who wins each round
+- [x] Add logging during auction decisions
+- [x] Add logging for which auction strategy decision was used and who wins each round
 ### Bidder
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
+- [ ] Inject bidders dynamically
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
-- [ ] Compose Auction Entry Point
+- [x] Compose Auction Entry Point
 - [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
-- [ ] Use a factory or config-based strategy loader
+- [x] Use a factory or config-based strategy loader
+- [ ] Handle request-scoped strategy switching
+- [ ] Add OpenRTB parsing 
 ### TODO 6/24/25
 - [x] auction/factory.go strat factory that selects the strat
 - [x] auction/runner.go entry point for auction runner
