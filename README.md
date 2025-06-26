@@ -108,20 +108,24 @@ The initial version will support:
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
 - [ ] Inject bidders dynamically
+- [ ] `MockBidder` supports random delays/CPMs
+- [ ] `Bid()` to return errors or simulate timeouts
+- [ ] Bidders to support bid rejection (e.g., CPM below floor)
+- [ ] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
-- [x] Compose Auction Entry Point
+- [x] Compose Auction Entry Point with logging
+- [x] auction/factory.go strat factory that selects the strat
+- [x] auction/runner.go entry point for auction runner
+- [x] Factory for selecting auction strategy dynamically
+- [ ] Metadata-driven config structure
+- [ ] Wire up minimal HTTP endpoint to change `AuctionConfig`
 - [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
 - [x] Use a factory or config-based strategy loader
 - [ ] Handle request-scoped strategy switching
 - [ ] Add OpenRTB parsing 
-### TODO 6/24/25
-- [x] auction/factory.go strat factory that selects the strat
-- [x] auction/runner.go entry point for auction runner
-- [x] Factory for selecting strategy dynamically
-- [ ] Metadata-driven config structure
-- [x] Auction entry point with logging
+### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
 
 ## Open Questions
