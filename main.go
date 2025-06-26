@@ -3,6 +3,8 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"nena-manipu-latina/auction"
+	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"net/http"
 	"time"
@@ -10,8 +12,15 @@ import (
 	"github.com/ervinmplayon/intercour-face-loggizle/logger"
 )
 
-// ! Because 8-balls are neither good nor bad, its just mid asf
+// ? Because 8-balls are neither good nor bad, its just mid asf
 var eight_ball_logger logger.Logger = &logger.LogrusLogger{}
+
+// TODO: isolate these into a file
+var bidders = []bidder.Bidder{
+	&bidder.MockBidder{Name: "BidderA", Delay: 50 * time.Millisecond, CPM: 1.10},
+	&bidder.MockBidder{Name: "BidderB", Delay: 70 * time.Millisecond, CPM: 1.25},
+	&bidder.MockBidder{Name: "BidderC", Delay: 30 * time.Millisecond, CPM: 0.95},
+}
 
 func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
@@ -31,12 +40,8 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 
 	eight_ball_logger.Info(fmt.Sprintf("Received Request: %v\n", adReq))
 
-	// TODO: Auction, creative, logging
-	adResp := models.AdResponse{
-		AdMarkup: "<div>Your AD Here</div>",
-		CPM:      1.25,
-		Bidder:   "mock-bidder",
-	}
+	// ? Auction entry point
+	adResp := auction.RunAuction(bidders, adReq)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(adResp)

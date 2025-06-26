@@ -99,26 +99,33 @@ The initial version will support:
 - [ ] Use composition for response builders or decorators
 ### Logging
 - [x] Reuse logging library created by my genius ass.
-- [ ] Inject logger into specific components (auction engine)
+- [x] Inject logger into specific components (auction engine)
 - [ ] Support structured logging (e.g., with fields for request ID, latency)
 - [ ] Add logging when a bid is filtered out
-- [ ] Add logging during auction decisions
-- [ ] Add logging for which strategy decision was used and who wins each round
+- [x] Add logging during auction decisions
+- [x] Add logging for which auction strategy decision was used and who wins each round
 ### Bidder
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
+- [ ] Inject bidders dynamically
+- [ ] `MockBidder` supports random delays/CPMs
+- [ ] `Bid()` to return errors or simulate timeouts
+- [ ] Bidders to support bid rejection (e.g., CPM below floor)
+- [ ] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
-- [ ] Compose Auction Entry Point
-- [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
-- [ ] Use a factory or config-based strategy loader
-### TODO 6/24/25
-- [ ] auction/factory.go strat factory that selects the strat
-- [ ] auction/runner.go entry point for auction runner
-- [ ] Factory for selecting strategy dynamically
+- [x] Compose Auction Entry Point with logging
+- [x] auction/factory.go strat factory that selects the strat
+- [x] auction/runner.go entry point for auction runner
+- [x] Factory for selecting auction strategy dynamically
 - [ ] Metadata-driven config structure
-- [ ] Auction entry point with logging
+- [ ] Wire up minimal HTTP endpoint to change `AuctionConfig`
+- [ ] Apply more filters or strategies like `GeoTargetingFilter`, `RoundRobinAuction`, etc. 
+- [x] Use a factory or config-based strategy loader
+- [ ] Handle request-scoped strategy switching
+- [ ] Add OpenRTB parsing 
+### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
 
 ## Open Questions
