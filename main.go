@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"net/http"
 	"time"
@@ -10,8 +11,15 @@ import (
 	"github.com/ervinmplayon/intercour-face-loggizle/logger"
 )
 
-// ! Because 8-balls are neither good nor bad, its just mid asf
+// ? Because 8-balls are neither good nor bad, its just mid asf
 var eight_ball_logger logger.Logger = &logger.LogrusLogger{}
+
+// TODO: isolate these into a file
+var bidders = []bidder.Bidder{
+	&bidder.MockBidder{Name: "BidderA", Delay: 50 * time.Millisecond, CPM: 1.10},
+	&bidder.MockBidder{Name: "BidderB", Delay: 70 * time.Millisecond, CPM: 1.25},
+	&bidder.MockBidder{Name: "BidderC", Delay: 30 * time.Millisecond, CPM: 0.95},
+}
 
 func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
