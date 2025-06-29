@@ -14,6 +14,19 @@ var defaultMockBidders = []Bidder{
  * For now, it's hardcoded, later query a DB or config service.
  */
 func Factory(publisherID string) []Bidder {
-	// * Placeholder: customize based on publisherID later
-	return defaultMockBidders
+	switch publisherID {
+	case "publisher_firstresponder":
+		return []Bidder{
+			&MockBidder{Name: "FastDSP", Delay: 20 * time.Millisecond, CPM: 1.05},
+			&MockBidder{Name: "ReliableDSP", Delay: 40 * time.Millisecond, CPM: 1.10},
+		}
+	case "publisher_roundrobin":
+		return []Bidder{
+			&MockBidder{Name: "SlowBidder", Delay: 100 * time.Millisecond, CPM: 0.99},
+			&MockBidder{Name: "AggressiveDSP", Delay: 50 * time.Millisecond, CPM: 1.30},
+		}
+	default:
+		// ? Use defaultMockBidders as fallback
+		return defaultMockBidders
+	}
 }
