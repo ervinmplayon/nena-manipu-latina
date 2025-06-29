@@ -134,6 +134,7 @@ The initial version will support:
 - [ ] Graceful fallback from unknown configs
 - [ ] Optional config refresh middleware 
 - [ ] Implement config service
+- [ ] Turn hardcoded PublisherID inot reusable constants on `config/publisher.go` and `bidder/factory.go` 
 ### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
 
