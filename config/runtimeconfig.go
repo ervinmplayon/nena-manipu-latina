@@ -29,3 +29,9 @@ var publisherConfigs = map[string]PublisherConfig{
 		},
 	},
 }
+
+// ? This returns config based on publisher ID
+func GetPublisherConfig(publisherID string) (PublisherConfig, bool) {
+	config, exists := publisherConfigs[publisherID]
+	return config, exists
+}
