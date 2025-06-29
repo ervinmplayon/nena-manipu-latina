@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"nena-manipu-latina/auction"
-	"nena-manipu-latina/bidder"
+	"nena-manipu-latina/config"
 	"nena-manipu-latina/models"
 	"net/http"
 	"time"
@@ -14,13 +14,6 @@ import (
 
 // ? Because 8-balls are neither good nor bad, its just mid asf
 var eight_ball_logger logger.Logger = &logger.LogrusLogger{}
-
-// TODO: isolate these into a file
-var bidders = []bidder.Bidder{
-	&bidder.MockBidder{Name: "BidderA", Delay: 50 * time.Millisecond, CPM: 1.10},
-	&bidder.MockBidder{Name: "BidderB", Delay: 70 * time.Millisecond, CPM: 1.25},
-	&bidder.MockBidder{Name: "BidderC", Delay: 30 * time.Millisecond, CPM: 0.95},
-}
 
 func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()
@@ -38,10 +31,16 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eight_ball_logger.Info(fmt.Sprintf("Received Request: %v\n", adReq))
+	eight_ball_logger.Info(fmt.Sprintf("Received Request from Publisher: %s\n", adReq.PublisherID))
+	pubConfig, found := config.GetPublisherConfig(adReq.PublisherID)
+	if !found {
+		eight_ball_logger.Error(fmt.Sprintf("Unknown publisher ID: %s", adReq.PublisherID))
+		http.Error(w, "Unknown publisher", http.StatusBadRequest)
+		return
+	}
 
 	// ? Auction entry point
-	adResp := auction.RunAuction(bidders, adReq)
+	adResp := auction.RunAuction(pubConfig.Bidders, pubConfig.Strategy, adReq)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(adResp)

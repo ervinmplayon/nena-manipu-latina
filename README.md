@@ -111,7 +111,8 @@ The initial version will support:
 - [ ] `MockBidder` supports random delays/CPMs
 - [ ] `Bid()` to return errors or simulate timeouts
 - [ ] Bidders to support bid rejection (e.g., CPM below floor)
-- [ ] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
+- [x] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
+- [ ] Move bidder wiring logic to a `bidders/factory.go` file
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
@@ -125,6 +126,10 @@ The initial version will support:
 - [x] Use a factory or config-based strategy loader
 - [ ] Handle request-scoped strategy switching
 - [ ] Add OpenRTB parsing 
+### Configs
+- [ ] `publisherConfig` hydrated from a DB, redis or config service.
+- [ ] Graceful fallback from unknown configs
+- [ ] Optional config refresh middleware 
 ### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
 
