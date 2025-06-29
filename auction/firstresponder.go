@@ -13,8 +13,8 @@ type FirstResponder struct{}
 func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) models.AdResponse {
 	resCh := make(chan models.AdResponse, len(bids))
 	for _, bb := range bids {
-		go func(bidder bidder.Bidder) {
-			resCh <- bidder.Bid(req)
+		go func(bb bidder.Bidder) {
+			resCh <- bb.Bid(req)
 		}(bb)
 	}
 	// ? In production, I want to protect against dead bidders. If a bidder does not respond,
@@ -22,7 +22,7 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) mo
 	select {
 	case res := <-resCh:
 		return res // * first to respond wins
-	case <-time.After(10 * time.Millisecond):
+	case <-time.After(50 * time.Millisecond):
 		return models.AdResponse{} // * fallback / timeout
 	}
 }

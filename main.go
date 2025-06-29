@@ -13,7 +13,7 @@ import (
 )
 
 // ? Because 8-balls are neither good nor bad, its just mid asf
-var eight_ball_logger logger.Logger = &logger.LogrusLogger{}
+var eight_ball_logger logger.Logger = &logger.StandardLogger{}
 
 func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	start := time.Now()

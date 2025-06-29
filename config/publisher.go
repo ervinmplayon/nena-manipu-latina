@@ -3,7 +3,6 @@ package config
 import (
 	"nena-manipu-latina/auction"
 	"nena-manipu-latina/bidder"
-	"time"
 )
 
 // ? PublisherConfig is loaded per incoming ad request
@@ -14,24 +13,21 @@ type PublisherConfig struct {
 
 // ? Fake static config mapping (can later be replaced by DB or Redis)
 var publisherConfigs = map[string]PublisherConfig{
-	"pub-123": {
+	"publisher_firstresponder": {
 		Strategy: auction.FirstResponderStrategy,
-		Bidders: []bidder.Bidder{
-			&bidder.MockBidder{Name: "FastDSP", Delay: 20 * time.Millisecond, CPM: 1.05},
-			&bidder.MockBidder{Name: "ReliableDSP", Delay: 40 * time.Millisecond, CPM: 1.10},
-		},
+		Bidders:  bidder.Factory("publisher_firstresponder"),
 	},
-	"pub-abc": {
+	"publisher_roundrobin": {
 		Strategy: auction.RoundRobinStrategy,
-		Bidders: []bidder.Bidder{
-			&bidder.MockBidder{Name: "SlowBidder", Delay: 100 * time.Millisecond, CPM: 0.99},
-			&bidder.MockBidder{Name: "AggressiveDSP", Delay: 50 * time.Millisecond, CPM: 1.30},
-		},
+		Bidders:  bidder.Factory("publisher_roundrobin"),
 	},
 }
 
 // ? This returns config based on publisher ID
 func GetPublisherConfig(publisherID string) (PublisherConfig, bool) {
 	config, exists := publisherConfigs[publisherID]
+	if !exists {
+		config, exists = publisherConfigs["default"]
+	}
 	return config, exists
 }

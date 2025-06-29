@@ -1,5 +1,5 @@
 # nena-manipu-latina
-Nena Manipulatina: High Concurrency Ad Server
+Nena Manipulatina: High Concurrency SSP Ad Server
 
 ## Table of Contents
 [Overview](#overview)  
@@ -76,7 +76,7 @@ The initial version will support:
 * Concurrency Model: Will leverage goroutines, rate limiters and sync primitives. 
 
 ## Basic Request-Auction Flow
-1. Client makes a request to `/ad` endpoint with parameters
+1. Client makes a request to `/serve` endpoint with parameters
 2. Request handler validates and constructs an internal bid request object, enriches context (e.g., geo)
 3. Auction engine calls out to all bidders and mock bidders concurrently within a timeout.
 4. Bids are collected, evaluated and the winner is selected
@@ -104,6 +104,7 @@ The initial version will support:
 - [ ] Add logging when a bid is filtered out
 - [x] Add logging during auction decisions
 - [x] Add logging for which auction strategy decision was used and who wins each round
+- [ ] OpenRTB logging
 ### Bidder
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
@@ -112,7 +113,10 @@ The initial version will support:
 - [ ] `Bid()` to return errors or simulate timeouts
 - [ ] Bidders to support bid rejection (e.g., CPM below floor)
 - [x] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
-- [ ] Move bidder wiring logic to a `bidders/factory.go` file
+- [x] Move bidder wiring logic to a `bidders/factory.go` file
+- [ ] Query from config service
+- [ ] Filter bidders by region, device type, etc
+- [ ] Support runtime updates via admin UI
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
@@ -130,8 +134,13 @@ The initial version will support:
 - [ ] `publisherConfig` hydrated from a DB, redis or config service.
 - [ ] Graceful fallback from unknown configs
 - [ ] Optional config refresh middleware 
+- [ ] Implement config service
+- [ ] Turn hardcoded PublisherID inot reusable constants on `config/publisher.go` and `bidder/factory.go` 
 ### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
+### DSPs
+- [ ] Wire real DSPs
+- [ ] creative rendering
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
