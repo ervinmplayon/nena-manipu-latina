@@ -1,5 +1,5 @@
 # nena-manipu-latina
-Nena Manipulatina: High Concurrency Ad Server
+Nena Manipulatina: High Concurrency SSP Ad Server
 
 ## Table of Contents
 [Overview](#overview)  
