@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"nena-manipu-latina/auction"
 	"nena-manipu-latina/bidder"
+	"nena-manipu-latina/config"
 	"nena-manipu-latina/models"
 	"net/http"
 	"time"
@@ -39,9 +40,15 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	eight_ball_logger.Info(fmt.Sprintf("Received Request from Publisher: %s\n", adReq.PublisherID))
+	pubConfig, found := config.GetPublisherConfig(adReq.PublisherID)
+	if !found {
+		eight_ball_logger.Error(fmt.Sprintf("Unknown publisher ID: %s", adReq.PublisherID))
+		http.Error(w, "Unknown publisher", http.StatusBadRequest)
+		return
+	}
 
 	// ? Auction entry point
-	adResp := auction.RunAuction(bidders, adReq)
+	adResp := auction.RunAuction(pubConfig.Bidders, pubConfig.Strategy, adReq)
 
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(adResp)

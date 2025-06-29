@@ -6,10 +6,10 @@ import (
 	"nena-manipu-latina/models"
 )
 
-func RunAuction(bidders []bidder.Bidder, req models.AdRequest) models.AdResponse {
-	eight_ball_logger.Info(fmt.Sprintf("Run Auction: Auction starting for request: %v", req))
+func RunAuction(bidders []bidder.Bidder, strategyName string, req models.AdRequest) models.AdResponse {
+	eight_ball_logger.Info(fmt.Sprintf("Run Auction: Starting for strategy [%s], request: %v", strategyName, req))
 
-	stratImplementation, err := Factory(CurrentAuctionConfig.StrategyName)
+	stratImplementation, err := Factory(strategyName)
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("Run Auction [ERROR]: %v", err))
 		return models.AdResponse{}
