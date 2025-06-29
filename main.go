@@ -38,7 +38,7 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	eight_ball_logger.Info(fmt.Sprintf("Received Request: %v\n", adReq))
+	eight_ball_logger.Info(fmt.Sprintf("Received Request from Publisher: %s\n", adReq.PublisherID))
 
 	// ? Auction entry point
 	adResp := auction.RunAuction(bidders, adReq)
