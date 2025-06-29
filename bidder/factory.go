@@ -8,3 +8,8 @@ var defaultMockBidders = []Bidder{
 	&MockBidder{Name: "BidderB", Delay: 70 * time.Millisecond, CPM: 1.25},
 	&MockBidder{Name: "BidderC", Delay: 30 * time.Millisecond, CPM: 0.95},
 }
+
+/*
+ * Factory returns a list of bidders based on a publisher ID.
+ * For now, it's hardcoded, later query a DB or config service.
+ */

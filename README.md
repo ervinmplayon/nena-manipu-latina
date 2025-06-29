@@ -130,6 +130,7 @@ The initial version will support:
 - [ ] `publisherConfig` hydrated from a DB, redis or config service.
 - [ ] Graceful fallback from unknown configs
 - [ ] Optional config refresh middleware 
+- [ ] Implement config service
 ### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
 
