@@ -6,8 +6,7 @@ type AuctionConfig struct {
 	// ? Later on, add TimeoutMS, MaxBidders, Weightingm etc.
 }
 
-// ! Example only
-// TODO: source this from JSON, environment or DB later
+// * This config is no longer used. Instead config/runtimeconfig is now in charge of configs
 var CurrentAuctionConfig = AuctionConfig{
 	StrategyName: FirstResponderStrategy, // or RoundRobinStrategy
 }
