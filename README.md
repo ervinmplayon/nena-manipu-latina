@@ -111,7 +111,7 @@ The initial version will support:
 - [ ] `MockBidder` supports random delays/CPMs
 - [ ] `Bid()` to return errors or simulate timeouts
 - [ ] Bidders to support bid rejection (e.g., CPM below floor)
-- [ ] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
+- [x] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
