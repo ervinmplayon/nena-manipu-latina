@@ -21,6 +21,7 @@ var publisherConfigs = map[string]PublisherConfig{
 		Strategy: auction.RoundRobinStrategy,
 		Bidders:  bidder.Factory("publisher_roundrobin"),
 	},
+	// TODO: give the default bidders a chance in this Map
 }
 
 // ? This returns config based on publisher ID
