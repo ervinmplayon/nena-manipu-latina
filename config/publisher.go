@@ -21,11 +21,13 @@ var publisherConfigs = map[string]PublisherConfig{
 		Strategy: auction.RoundRobinStrategy,
 		Bidders:  bidder.Factory("publisher_roundrobin"),
 	},
-	// TODO: give the default bidders a chance in this Map
 }
 
 // ? This returns config based on publisher ID
 func GetPublisherConfig(publisherID string) (PublisherConfig, bool) {
 	config, exists := publisherConfigs[publisherID]
+	if !exists {
+		config, exists = publisherConfigs["default"]
+	}
 	return config, exists
 }

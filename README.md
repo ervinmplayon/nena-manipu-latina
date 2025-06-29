@@ -76,7 +76,7 @@ The initial version will support:
 * Concurrency Model: Will leverage goroutines, rate limiters and sync primitives. 
 
 ## Basic Request-Auction Flow
-1. Client makes a request to `/ad` endpoint with parameters
+1. Client makes a request to `/serve` endpoint with parameters
 2. Request handler validates and constructs an internal bid request object, enriches context (e.g., geo)
 3. Auction engine calls out to all bidders and mock bidders concurrently within a timeout.
 4. Bids are collected, evaluated and the winner is selected
@@ -104,6 +104,7 @@ The initial version will support:
 - [ ] Add logging when a bid is filtered out
 - [x] Add logging during auction decisions
 - [x] Add logging for which auction strategy decision was used and who wins each round
+- [ ] OpenRTB logging
 ### Bidder
 - [ ] Implement Basic Bidder logic to return actual bid
 - [ ] Multiple bidder types (DSPBidder, RandomBidder, etc)
@@ -137,6 +138,9 @@ The initial version will support:
 - [ ] Turn hardcoded PublisherID inot reusable constants on `config/publisher.go` and `bidder/factory.go` 
 ### AdminUI
 - [ ] Future-ready for runtime updates (Admin UI)
+### DSPs
+- [ ] Wire real DSPs
+- [ ] creative rendering
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
