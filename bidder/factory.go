@@ -13,3 +13,7 @@ var defaultMockBidders = []Bidder{
  * Factory returns a list of bidders based on a publisher ID.
  * For now, it's hardcoded, later query a DB or config service.
  */
+func Factory(publisherID string) []Bidder {
+	// * Placeholder: customize based on publisherID later
+	return defaultMockBidders
+}
