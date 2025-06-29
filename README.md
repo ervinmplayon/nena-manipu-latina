@@ -113,6 +113,9 @@ The initial version will support:
 - [ ] Bidders to support bid rejection (e.g., CPM below floor)
 - [x] `[]Bidder` list by fetching publisher-specific strategy from metadata/config
 - [x] Move bidder wiring logic to a `bidders/factory.go` file
+- [ ] Query from config service
+- [ ] Filter bidders by region, device type, etc
+- [ ] Support runtime updates via admin UI
 ### Auction
 - [x] Compose auction strategies and decorators
 - [x] Implement `HighestBidder`, `RoundRobin`, `1stResponder`
