@@ -5,12 +5,14 @@ import (
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"testing"
+	"time"
 )
 
 // ? Implement the bidder.Bidder interface as mock
 type mockBidder struct {
-	name     string
-	response models.AdResponse
+	name          string
+	response      models.AdResponse
+	responseDelay time.Duration
 }
 
 func (m mockBidder) Name() string {
@@ -18,6 +20,9 @@ func (m mockBidder) Name() string {
 }
 
 func (m mockBidder) Bid(req models.AdRequest) models.AdResponse {
+	if m.responseDelay > 0 {
+		time.Sleep(m.responseDelay)
+	}
 	return m.response
 }
 
