@@ -1,6 +1,6 @@
 # The ID
 ## Why the Bidder Factory logs immediately at app startup
-```shell\
+```shell
 2025/07/02 22:56:43 [INFO] Bidder Strategy Factory: Selected FirstResponder
 2025/07/02 22:56:43 [INFO] Bidder Strategy Factory: Selected RoundRobin
 2025/07/02 22:56:43 [INFO] Starting ad server on :8080...
