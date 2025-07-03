@@ -31,9 +31,21 @@ func TestFirstResponder_Auction(t *testing.T) {
 	strategy := auction.FirstResponder{}
 
 	bidders := []bidder.Bidder{
-		mockBidder{name: "BidderA", response: models.AdResponse{}}, // empty bid
-		mockBidder{name: "BidderB", response: models.AdResponse{CPM: 2.50, AdMarkup: "B content"}},
-		mockBidder{name: "BidderC", response: models.AdResponse{CPM: 1.00, AdMarkup: "C content"}},
+		mockBidder{
+			name:          "BidderA",
+			response:      models.AdResponse{CPM: 2.50, AdMarkup: "A content", Bidder: "A"},
+			responseDelay: 30 * time.Millisecond,
+		},
+		mockBidder{
+			name:          "BidderB",
+			response:      models.AdResponse{CPM: 1.00, AdMarkup: "B content", Bidder: "B"},
+			responseDelay: 10 * time.Millisecond, // ? <-- will win
+		},
+		mockBidder{
+			name:          "BidderC",
+			response:      models.AdResponse{CPM: 5.00, AdMarkup: "C content", Bidder: "C"},
+			responseDelay: 50 * time.Millisecond,
+		},
 	}
 
 	req := models.AdRequest{
@@ -47,7 +59,30 @@ func TestFirstResponder_Auction(t *testing.T) {
 	resp := strategy.Auction(bidders, req)
 
 	// * Assert
-	if resp.CPM != 2.50 || resp.AdMarkup != "B content" {
-		t.Errorf("Expected B content with 2.50 bid, got %+v", resp)
+	if resp.AdMarkup != "B content" || resp.Bidder != "B" {
+		t.Errorf("Expected B content from BidderB, got %+v", resp)
+	}
+}
+
+// ? Test when no bidders respond
+func TestFirstResponder_NoValidBids(t *testing.T) {
+	strategy := auction.FirstResponder{}
+
+	bidders := []bidder.Bidder{
+		mockBidder{name: "BidderX", response: models.AdResponse{}},
+		mockBidder{name: "BidderY", response: models.AdResponse{}},
+	}
+
+	req := models.AdRequest{
+		RequestID:   "test456",
+		PublisherID: "pub2",
+		AdUnit:      "unit2",
+		DeviceIP:    "5.6.7.8",
+	}
+
+	resp := strategy.Auction(bidders, req)
+
+	if resp != (models.AdResponse{}) {
+		t.Errorf("Expected empty response, got %+v", resp)
 	}
 }
