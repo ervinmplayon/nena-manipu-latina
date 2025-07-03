@@ -9,7 +9,7 @@ import (
 // ? This is declared at the package level, it has package scope. It can be used anywhere in this package
 var eight_ball_logger logger.Logger = &logger.StandardLogger{}
 
-func Factory(name string) (AuctionStrategy, error) {
+var Factory = func(name string) (AuctionStrategy, error) {
 	switch name {
 	case RoundRobinStrategy:
 		eight_ball_logger.Info(fmt.Sprintf("Auction Strategy Factory: Selected %s", RoundRobinStrategy))
