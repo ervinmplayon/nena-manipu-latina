@@ -141,6 +141,13 @@ The initial version will support:
 ### DSPs
 - [ ] Wire real DSPs
 - [ ] creative rendering
+## Pre-MVP 
+- [ ] DSP option: config file `bidders.json` then load bidder config from this file
+- [ ] HTTP-based bidder clients
+- [ ] Replace hardcoded bidders with mock DSPs (for testing)
+- [ ] External DSP call with timeout
+- [ ] Ad endpoint for publisher
+- [ ] Logging, metrics, errors: polish for MVP
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
