@@ -12,7 +12,7 @@ import (
 	"github.com/ervinmplayon/intercour-face-loggizle/logger"
 )
 
-// ? Because 8-balls are neither good nor bad, its just mid asf
+// ? Because 8-balls are neither good nor bad, they're just mid asf, unless form the 80s.
 var eight_ball_logger logger.Logger = &logger.StandardLogger{}
 
 func handleAdRequest(w http.ResponseWriter, r *http.Request) {
