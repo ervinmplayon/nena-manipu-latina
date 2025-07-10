@@ -7,17 +7,29 @@ import (
 )
 
 type MockBidder struct {
-	Name  string
+	name  string
 	Delay time.Duration
 	CPM   float64
+}
+
+func NewMockBidder(name string, delay time.Duration, cpm float64) *MockBidder {
+	return &MockBidder{
+		name:  name,
+		Delay: delay,
+		CPM:   cpm,
+	}
+}
+
+func (mb *MockBidder) Name() string {
+	return mb.name
 }
 
 func (mb *MockBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	time.Sleep(mb.Delay)
 	eight_ball_logger.Info(fmt.Sprintf("[MOCK BIDDER] %s responding with CPM=%.2f after %s", mb.Name, mb.CPM, mb.Delay))
 	return models.AdResponse{
-		Bidder:   mb.Name,
+		Bidder:   mb.name,
 		CPM:      mb.CPM,
-		AdMarkup: "<div>Mock AD from " + mb.Name + "</div>",
+		AdMarkup: "<div>Mock AD from " + mb.name + "</div>",
 	}, nil
 }
