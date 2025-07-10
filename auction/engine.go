@@ -17,7 +17,8 @@ func RunAuction(bidders []bidder.Bidder, strategyName string, req models.AdReque
 	}
 	result, err := stratImplementation.Auction(bidders, req)
 	if err != nil {
-
+		eight_ball_logger.Error(fmt.Sprintf("Run Auction [ERROR] after Auction: %v", err))
+		return models.AdResponse{}, errors.New("run Auction error after Auction")
 	}
 	eight_ball_logger.Info(fmt.Sprintf("Run Auction: Auction Complete. Winning Response: %v", result))
 	return result, nil
