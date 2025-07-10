@@ -11,11 +11,11 @@ import (
 // ? Define mock strategy for testing
 type mockStrategy struct{}
 
-func (m *mockStrategy) Auction(bidders []bidder.Bidder, req models.AdRequest) models.AdResponse {
+func (m *mockStrategy) Auction(bidders []bidder.Bidder, req models.AdRequest) (models.AdResponse, error) {
 	return models.AdResponse{
 		Bidder: "TestDSP",
 		CPM:    1.23,
-	}
+	}, nil
 }
 
 // ? Override the Factory function for testing
@@ -31,12 +31,12 @@ func TestRunAuction_ReturnsExpectedResponse(t *testing.T) {
 
 	// ? Create mock bidders (though this mockStrategy ignores them)
 	bidders := []bidder.Bidder{
-		&bidder.MockBidder{Name: "Mock1", Delay: 10 * time.Millisecond, CPM: 1.00},
+		bidder.NewMockBidder("Mock1", 10*time.Millisecond, 1.00),
 	}
 
 	// * Call RunAuction
 	req := models.AdRequest{AdUnit: "banner"}
-	resp := auction.RunAuction(bidders, "any-strategy", req)
+	resp, _ := auction.RunAuction(bidders, "any-strategy", req)
 
 	if resp.Bidder != "TestDSP" || resp.CPM != 1.23 {
 		t.Errorf("Unexpected auction result: %+v", resp)
