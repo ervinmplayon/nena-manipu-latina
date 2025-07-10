@@ -2,6 +2,7 @@
 package bidder
 
 import (
+	"errors"
 	"fmt"
 	"nena-manipu-latina/models"
 )
@@ -15,7 +16,7 @@ func (m *MinPriceBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	res, err := m.Inner.Bid(req)
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("Min Price Bidder: Error on Bid() %s", err))
-		return models.AdResponse{}, err
+		return models.AdResponse{}, errors.New("min Price Bidder error on Bid()")
 	}
 
 	if res.CPM < m.MinPrice {

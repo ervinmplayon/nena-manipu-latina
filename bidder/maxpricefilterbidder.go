@@ -2,6 +2,7 @@
 package bidder
 
 import (
+	"errors"
 	"fmt"
 	"nena-manipu-latina/models"
 )
@@ -15,7 +16,7 @@ func (m *MaxPriceBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	res, err := m.Inner.Bid(req)
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("Max Price Bidder: Error on Bid() %s", err))
-		return models.AdResponse{}, err
+		return models.AdResponse{}, errors.New("max Price Bidder error on Bid()")
 	}
 
 	if res.CPM > m.MaxPrice {
