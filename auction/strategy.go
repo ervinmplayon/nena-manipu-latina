@@ -7,5 +7,5 @@ import (
 
 type AuctionStrategy interface {
 	// ? this will make sense as an auction takes ad responses and have 1 ad win
-	Auction(bids []bidder.Bidder, req models.AdRequest) models.AdResponse
+	Auction(bids []bidder.Bidder, req models.AdRequest) (models.AdResponse, error)
 }

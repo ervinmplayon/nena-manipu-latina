@@ -26,7 +26,7 @@ func (mb *MockBidder) Name() string {
 
 func (mb *MockBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	time.Sleep(mb.Delay)
-	eight_ball_logger.Info(fmt.Sprintf("[MOCK BIDDER] %s responding with CPM=%.2f after %s", mb.Name, mb.CPM, mb.Delay))
+	eight_ball_logger.Info(fmt.Sprintf("[MOCK BIDDER] %s responding with CPM=%.2f after %s", mb.name, mb.CPM, mb.Delay))
 	return models.AdResponse{
 		Bidder:   mb.name,
 		CPM:      mb.CPM,

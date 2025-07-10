@@ -14,7 +14,7 @@ func RunAuction(bidders []bidder.Bidder, strategyName string, req models.AdReque
 		eight_ball_logger.Error(fmt.Sprintf("Run Auction [ERROR]: %v", err))
 		return models.AdResponse{}
 	}
-	result := stratImplementation.Auction(bidders, req)
+	result, err := stratImplementation.Auction(bidders, req)
 	eight_ball_logger.Info(fmt.Sprintf("Run Auction: Auction Complete. Winning Response: %v", result))
 	return result
 }
