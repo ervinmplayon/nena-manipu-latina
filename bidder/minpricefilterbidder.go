@@ -19,7 +19,7 @@ func (m *MinPriceBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	}
 
 	if res.CPM < m.MinPrice {
-		// Return empty response if invalid or too low
+		// Return empty response if invalid or too low. NOT AN ERROR
 		eight_ball_logger.Info(fmt.Sprintf("Min Price Bidder: Too cheap damn it. Min Price is %v, CPM is %v", m.MinPrice, res.CPM))
 		return models.AdResponse{}, nil
 	}
