@@ -15,7 +15,7 @@ type RoundRobin struct {
 
 func (rr *RoundRobin) Auction(bids []bidder.Bidder, req models.AdRequest) (models.AdResponse, error) {
 	if len(bids) == 0 {
-		return models.AdResponse{}, errors.New("Round Robin: no bidders available")
+		return models.AdResponse{}, errors.New("round Robin: no bidders available")
 	}
 	i := rr.index.Add(1)
 	selected := bids[i%uint64(len(bids))]
