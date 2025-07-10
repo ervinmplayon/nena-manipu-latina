@@ -40,8 +40,12 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// ? Auction entry point
-	adResp := auction.RunAuction(pubConfig.Bidders, pubConfig.Strategy, adReq)
-
+	adResp, err := auction.RunAuction(pubConfig.Bidders, pubConfig.Strategy, adReq)
+	if err != nil {
+		eight_ball_logger.Error(fmt.Sprintf("Auction failed: %v", err))
+		http.Error(w, "No ad available", http.StatusNoContent)
+		return
+	}
 	w.Header().Set("Content-Type", "application/json")
 	json.NewEncoder(w).Encode(adResp)
 
