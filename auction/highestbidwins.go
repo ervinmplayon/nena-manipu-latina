@@ -6,8 +6,8 @@ import (
 
 type HighestBidWins struct{}
 
-func (h *HighestBidWins) Auction(bids []models.AdResponse) models.AdResponse {
-	var winner models.AdResponse
+func (h *HighestBidWins) Auction(bids []models.BidResponse) models.BidResponse {
+	var winner models.BidResponse
 	var maxCPM float64
 
 	for _, bid := range bids {

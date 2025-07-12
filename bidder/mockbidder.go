@@ -24,10 +24,10 @@ func (mb *MockBidder) Name() string {
 	return mb.name
 }
 
-func (mb *MockBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
+func (mb *MockBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
 	time.Sleep(mb.Delay)
 	eight_ball_logger.Info(fmt.Sprintf("[MOCK BIDDER] %s responding with CPM=%.2f after %s", mb.name, mb.CPM, mb.Delay))
-	return models.AdResponse{
+	return models.BidResponse{
 		Bidder:   mb.name,
 		CPM:      mb.CPM,
 		AdMarkup: "<div>Mock AD from " + mb.name + "</div>",

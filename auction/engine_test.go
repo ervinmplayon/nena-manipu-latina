@@ -11,8 +11,8 @@ import (
 // ? Define mock strategy for testing
 type mockStrategy struct{}
 
-func (m *mockStrategy) Auction(bidders []bidder.Bidder, req models.AdRequest) (models.AdResponse, error) {
-	return models.AdResponse{
+func (m *mockStrategy) Auction(bidders []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
+	return models.BidResponse{
 		Bidder: "TestDSP",
 		CPM:    1.23,
 	}, nil
@@ -35,7 +35,7 @@ func TestRunAuction_ReturnsExpectedResponse(t *testing.T) {
 	}
 
 	// * Call RunAuction
-	req := models.AdRequest{AdUnit: "banner"}
+	req := models.BidRequest{AdUnit: "banner"}
 	resp, _ := auction.RunAuction(bidders, "any-strategy", req)
 
 	if resp.Bidder != "TestDSP" || resp.CPM != 1.23 {
