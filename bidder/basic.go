@@ -9,6 +9,8 @@ type BasicBidder struct {
 	Name string
 }
 
+// TODO: Properly implement bidder interface. Implement Name()
+
 func (b *BasicBidder) Bid(req models.AdRequest) models.AdResponse {
 	// TODO: Evolve from hardcoded bids, basic logic to return a bid
 	return models.AdResponse{
