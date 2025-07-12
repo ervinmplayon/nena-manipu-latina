@@ -20,3 +20,7 @@ func NewHTTPBidder(name, endpoint string, timeout time.Duration) *HTTPBidder {
 		client:   &http.Client{},
 	}
 }
+
+func (hb *HTTPBidder) Name() string {
+	return hb.name
+}
