@@ -21,8 +21,8 @@ func (rr *RoundRobin) Auction(bids []bidder.Bidder, req models.AdRequest) (model
 	selected := bids[i%uint64(len(bids))]
 	resp, err := selected.Bid(req)
 	if err != nil {
-		// TODO: apply philosophy
-		return models.AdResponse{}, fmt.Errorf("bidder %s failed: %w", selected.Name(), err)
+		eight_ball_logger.Error(fmt.Sprintf("bidder %s failed: %s", selected.Name(), err.Error()))
+		return models.AdResponse{}, errors.New("round Robin bidder error")
 	}
 	return resp, nil
 }
