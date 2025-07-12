@@ -4,6 +4,7 @@ package auction
 
 import (
 	"errors"
+	"fmt"
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"time"
@@ -35,6 +36,7 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) (m
 		select {
 		case res := <-resCh:
 			if res.err == nil {
+				eight_ball_logger.Info(fmt.Sprintf("First Responder: %s won the bid", res.resp.Bidder))
 				return res.resp, nil // * first to respond wins
 			}
 		case <-timeout:
