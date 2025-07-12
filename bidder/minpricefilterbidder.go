@@ -12,6 +12,8 @@ type MinPriceBidder struct {
 	MinPrice float64
 }
 
+// TODO: Properly implement bidder interface. Implement Name()
+
 func (m *MinPriceBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	res, err := m.Inner.Bid(req)
 	if err != nil {
