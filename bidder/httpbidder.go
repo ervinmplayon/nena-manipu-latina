@@ -73,3 +73,6 @@ func (hb *HTTPBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
 
 	return bidResp, nil
 }
+
+// TODO: Write Unit Tests for this.
+// * Why? Once I learn the pattern for unit testing a request, i am even more unstoppable.
