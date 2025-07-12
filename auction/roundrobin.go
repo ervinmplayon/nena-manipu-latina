@@ -24,5 +24,6 @@ func (rr *RoundRobin) Auction(bids []bidder.Bidder, req models.AdRequest) (model
 		eight_ball_logger.Error(fmt.Sprintf("bidder %s failed: %s", selected.Name(), err.Error()))
 		return models.AdResponse{}, errors.New("round Robin bidder error")
 	}
+	eight_ball_logger.Info(fmt.Sprintf("Round Robin: %s won the bid", resp.Bidder))
 	return resp, nil
 }
