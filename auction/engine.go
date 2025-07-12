@@ -7,7 +7,7 @@ import (
 	"nena-manipu-latina/models"
 )
 
-// TODO: accommodate calling Bidders in parallel with timeout
+// TODO: accommodate calling Bidders concurrently with timeout
 
 func RunAuction(bidders []bidder.Bidder, strategyName string, req models.BidRequest) (models.BidResponse, error) {
 	eight_ball_logger.Info(fmt.Sprintf("Run Auction: Starting for strategy [%s], request: %v", strategyName, req))
