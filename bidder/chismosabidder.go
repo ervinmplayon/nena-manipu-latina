@@ -14,6 +14,8 @@ type ChismosaBidder struct {
 	Logger logger.Logger
 }
 
+// TODO: Properly implement bidder interface. Implement Name()
+
 func (cb *ChismosaBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	cb.Logger.Info("Processing bid request")
 	res, err := cb.Inner.Bid(req)
