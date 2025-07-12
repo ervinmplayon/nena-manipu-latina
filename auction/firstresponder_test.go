@@ -11,7 +11,7 @@ import (
 // ? Implement the bidder.Bidder interface as mock
 type mockBidder struct {
 	name          string
-	response      models.AdResponse
+	response      models.BidResponse
 	responseDelay time.Duration
 }
 
@@ -19,7 +19,7 @@ func (m mockBidder) Name() string {
 	return m.name
 }
 
-func (m mockBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
+func (m mockBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
 	if m.responseDelay > 0 {
 		time.Sleep(m.responseDelay)
 	}
@@ -33,22 +33,22 @@ func TestFirstResponder_Auction(t *testing.T) {
 	bidders := []bidder.Bidder{
 		mockBidder{
 			name:          "BidderA",
-			response:      models.AdResponse{CPM: 2.50, AdMarkup: "A content", Bidder: "A"},
+			response:      models.BidResponse{CPM: 2.50, AdMarkup: "A content", Bidder: "A"},
 			responseDelay: 30 * time.Millisecond,
 		},
 		mockBidder{
 			name:          "BidderB",
-			response:      models.AdResponse{CPM: 1.00, AdMarkup: "B content", Bidder: "B"},
+			response:      models.BidResponse{CPM: 1.00, AdMarkup: "B content", Bidder: "B"},
 			responseDelay: 10 * time.Millisecond, // ? <-- will win
 		},
 		mockBidder{
 			name:          "BidderC",
-			response:      models.AdResponse{CPM: 5.00, AdMarkup: "C content", Bidder: "C"},
+			response:      models.BidResponse{CPM: 5.00, AdMarkup: "C content", Bidder: "C"},
 			responseDelay: 50 * time.Millisecond,
 		},
 	}
 
-	req := models.AdRequest{
+	req := models.BidRequest{
 		RequestID:   "susie-stellar-request-123",
 		PublisherID: "gina-valentina",
 		AdUnit:      "sinatra-monroe-cheeks",
@@ -69,11 +69,11 @@ func TestFirstResponder_NoValidBids(t *testing.T) {
 	strategy := auction.FirstResponder{}
 
 	bidders := []bidder.Bidder{
-		mockBidder{name: "BidderX", response: models.AdResponse{}},
-		mockBidder{name: "BidderY", response: models.AdResponse{}},
+		mockBidder{name: "BidderX", response: models.BidResponse{}},
+		mockBidder{name: "BidderY", response: models.BidResponse{}},
 	}
 
-	req := models.AdRequest{
+	req := models.BidRequest{
 		RequestID:   "test456",
 		PublisherID: "pub2",
 		AdUnit:      "unit2",
@@ -82,7 +82,7 @@ func TestFirstResponder_NoValidBids(t *testing.T) {
 
 	resp, _ := strategy.Auction(bidders, req)
 
-	if resp != (models.AdResponse{}) {
+	if resp != (models.BidResponse{}) {
 		t.Errorf("Expected empty response, got %+v", resp)
 	}
 }

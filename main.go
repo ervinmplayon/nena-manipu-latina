@@ -24,7 +24,7 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	var adReq models.AdRequest
+	var adReq models.BidRequest
 	if err := json.NewDecoder(r.Body).Decode(&adReq); err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("Failed to decode JSON: %s", err.Error()))
 		http.Error(w, "Invalid JSON", http.StatusBadRequest)

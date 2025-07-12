@@ -31,7 +31,7 @@ func (hb *HTTPBidder) Name() string {
 	return hb.name
 }
 
-func (hb *HTTPBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
+func (hb *HTTPBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
 	ctx, cancel := context.WithTimeout(context.Background(), hb.timeout)
 	defer cancel()
 
@@ -39,14 +39,14 @@ func (hb *HTTPBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("http Bidder marshal error: %s", err.Error()))
 		err_msg := fmt.Sprintf("http Bidder marshal error: %s", err.Error())
-		return models.AdResponse{}, errors.New(err_msg)
+		return models.BidResponse{}, errors.New(err_msg)
 	}
 
 	httpReq, err := http.NewRequestWithContext(ctx, "POST", hb.endpoint, bytes.NewBuffer(body))
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("http Bidder request creation error: %s", err.Error()))
 		err_msg := fmt.Sprintf("http Bidder request creation error: %s", err.Error())
-		return models.AdResponse{}, errors.New(err_msg)
+		return models.BidResponse{}, errors.New(err_msg)
 	}
 	httpReq.Header.Set("Content-Type", "application/json")
 
@@ -54,21 +54,21 @@ func (hb *HTTPBidder) Bid(req models.AdRequest) (models.AdResponse, error) {
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("http Bidder http request error: %s", err.Error()))
 		err_msg := fmt.Sprintf("http Bidder http request error: %s", err.Error())
-		return models.AdResponse{}, errors.New(err_msg)
+		return models.BidResponse{}, errors.New(err_msg)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
 		eight_ball_logger.Error(fmt.Sprintf("http Bidder http bad response status [%s]", resp.Status))
 		err_msg := fmt.Sprintf("http Bidder http bad response status [%s]", resp.Status)
-		return models.AdResponse{}, errors.New(err_msg)
+		return models.BidResponse{}, errors.New(err_msg)
 	}
 
-	var bidResp models.AdResponse
+	var bidResp models.BidResponse
 	if err := json.NewDecoder(resp.Body).Decode(&bidResp); err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("http Bidder http decode error: %s", err.Error()))
 		err_msg := fmt.Sprintf("http Bidder http decode error: %s", err.Error())
-		return models.AdResponse{}, errors.New(err_msg)
+		return models.BidResponse{}, errors.New(err_msg)
 	}
 
 	return bidResp, nil

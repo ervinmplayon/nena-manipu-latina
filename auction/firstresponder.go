@@ -12,13 +12,13 @@ import (
 
 type FirstResponder struct{}
 
-func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) (models.AdResponse, error) {
+func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
 	if len(bids) == 0 {
-		return models.AdResponse{}, errors.New("first Responder: no bidders available")
+		return models.BidResponse{}, errors.New("first Responder: no bidders available")
 	}
 
 	type result struct {
-		resp models.AdResponse
+		resp models.BidResponse
 		err  error
 	}
 
@@ -40,10 +40,10 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) (m
 				return res.resp, nil // * first to respond wins
 			}
 		case <-timeout:
-			return models.AdResponse{}, errors.New("first Responder: timeout waiting for bids") // * fallback / timeout
+			return models.BidResponse{}, errors.New("first Responder: timeout waiting for bids") // * fallback / timeout
 		}
 	}
-	return models.AdResponse{}, errors.New("first Responder: no valid bids returned")
+	return models.BidResponse{}, errors.New("first Responder: no valid bids returned")
 	// TODO: rethink if returning an error makes the most sense. Perhaps an Info will suffice?
 	// * Apply the same to `case<-timeout`
 }
