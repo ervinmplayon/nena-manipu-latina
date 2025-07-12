@@ -44,4 +44,6 @@ func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.AdRequest) (m
 		}
 	}
 	return models.AdResponse{}, errors.New("first Responder: no valid bids returned")
+	// TODO: rethink if returning an error makes the most sense. Perhaps an Info will suffice?
+	// * Apply the same to `case<-timeout`
 }
