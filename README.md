@@ -148,6 +148,7 @@ The initial version will support:
 - [ ] External DSP call with timeout
 - [ ] Ad endpoint for publisher
 - [ ] Logging, metrics, errors: polish for MVP
+- [ ] Review Error proliferation best practices
 
 ## Open Questions
 * What is the latency budget we want to guarantee at scale?
