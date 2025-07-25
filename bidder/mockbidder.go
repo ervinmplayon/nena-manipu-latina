@@ -30,6 +30,6 @@ func (mb *MockBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
 	return models.BidResponse{
 		Bidder:   mb.name,
 		CPM:      mb.CPM,
-		AdMarkup: "<div>Mock AD from " + mb.name + "</div>",
+		Creative: "<div>Mock AD from " + mb.name + "</div>",
 	}, nil
 }
