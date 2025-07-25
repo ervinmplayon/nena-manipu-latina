@@ -6,6 +6,6 @@ import (
 	"time"
 )
 
-var collectBidsConcurrently = func(bidders []bidder.Bidder, req models.BidRequest, timeout time.Duration) {
+var collectBidsConcurrently = func(bidders []bidder.Bidder, req models.BidRequest, timeout time.Duration) []*models.AuctionResult {
 
 }
