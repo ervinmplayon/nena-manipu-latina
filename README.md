@@ -143,7 +143,7 @@ The initial version will support:
 - [ ] creative rendering
 ## Pre-MVP 
 - [ ] DSP option: config file `bidders.json` then load bidder config from this file
-- [ ] HTTP-based bidder clients
+- [x] HTTP-based bidder clients
 - [ ] Replace hardcoded bidders with mock DSPs (for testing)
 - [ ] External DSP call with timeout
 - [ ] Ad endpoint for publisher
