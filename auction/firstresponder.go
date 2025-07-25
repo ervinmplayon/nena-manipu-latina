@@ -12,38 +12,15 @@ import (
 
 type FirstResponder struct{}
 
-func (fr *FirstResponder) Auction(bids []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
-	if len(bids) == 0 {
-		return models.BidResponse{}, errors.New("first Responder: no bidders available")
-	}
+func (fr *FirstResponder) Auction(bidders []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
+	results := collectBidsConcurrently(bidders, req, 50*time.Millisecond)
 
-	type result struct {
-		resp models.BidResponse
-		err  error
-	}
-
-	resCh := make(chan result, len(bids))
-	for _, bb := range bids {
-		go func(bb bidder.Bidder) {
-			resp, err := bb.Bid(req)
-			resCh <- result{resp, err}
-		}(bb)
-	}
-	// ? In production, I want to protect against dead bidders. If a bidder does not respond,
-	// ? this can block forever, adding a timeout aka Defensive Handling
-	timeout := time.After(50 * time.Millisecond)
-	for range bids {
-		select {
-		case res := <-resCh:
-			if res.err == nil {
-				eight_ball_logger.Info(fmt.Sprintf("First Responder: %s won the bid", res.resp.Bidder))
-				return res.resp, nil // * first to respond wins
-			}
-		case <-timeout:
-			return models.BidResponse{}, errors.New("first Responder: timeout waiting for bids") // * fallback / timeout
+	for _, res := range results {
+		if res.Err == nil && res.Response != nil {
+			eight_ball_logger.Info(fmt.Sprintf("First Responder: %s won the bid", res.Response.Bidder))
+			return *res.Response, nil // * First valid response
 		}
 	}
-	return models.BidResponse{}, errors.New("first Responder: no valid bids returned")
-	// TODO: rethink if returning an error makes the most sense. Perhaps an Info will suffice?
-	// * Apply the same to `case<-timeout`
+	eight_ball_logger.Error("first responder: No valid bidder response")
+	return models.BidResponse{}, errors.New("first responder: No valid bidder response")
 }
