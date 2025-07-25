@@ -25,11 +25,13 @@ var collectBidsConcurrently = func(bidders []bidder.Bidder, req models.BidReques
 	}
 
 	// ? Wait with timeout to avoid deadlock
+	// TODO: learn the internals of this whole goroutine
 	done := make(chan struct{})
 	go func() {
 		wg.Wait()
 		close(done)
-	}() //TODO: learn the internals of this whole goroutine
+	}()
+	//TODO: ============================================
 
 	var results []*models.AuctionResult
 	select {
