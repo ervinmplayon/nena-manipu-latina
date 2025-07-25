@@ -33,17 +33,17 @@ func TestFirstResponder_Auction(t *testing.T) {
 	bidders := []bidder.Bidder{
 		mockBidder{
 			name:          "BidderA",
-			response:      models.BidResponse{CPM: 2.50, AdMarkup: "A content", Bidder: "A"},
+			response:      models.BidResponse{CPM: 2.50, Creative: "A content", Bidder: "A"},
 			responseDelay: 30 * time.Millisecond,
 		},
 		mockBidder{
 			name:          "BidderB",
-			response:      models.BidResponse{CPM: 1.00, AdMarkup: "B content", Bidder: "B"},
+			response:      models.BidResponse{CPM: 1.00, Creative: "B content", Bidder: "B"},
 			responseDelay: 10 * time.Millisecond, // ? <-- will win
 		},
 		mockBidder{
 			name:          "BidderC",
-			response:      models.BidResponse{CPM: 5.00, AdMarkup: "C content", Bidder: "C"},
+			response:      models.BidResponse{CPM: 5.00, Creative: "C content", Bidder: "C"},
 			responseDelay: 50 * time.Millisecond,
 		},
 	}
@@ -59,7 +59,7 @@ func TestFirstResponder_Auction(t *testing.T) {
 	resp, _ := strategy.Auction(bidders, req)
 
 	// * Assert
-	if resp.AdMarkup != "B content" || resp.Bidder != "B" {
+	if resp.Creative != "B content" || resp.Bidder != "B" {
 		t.Errorf("Expected B content from BidderB, got %+v", resp)
 	}
 }
