@@ -10,12 +10,15 @@ import (
 )
 
 /*
+?---------------------------------------------------------------------------------------------------------------
  * Why this is production-grade:
  * Context-based timeout control
  * Safe writes to channel (avoids panics)
  * Partial response collection (even if some bidders fail)
  * Structured error logging per bidder (optional hook)
- */
+ * Proper channel draining
+ ?---------------------------------------------------------------------------------------------------------------
+*/
 
 var collectBidsConcurrently = func(
 	ctx context.Context,
@@ -80,3 +83,11 @@ var collectBidsConcurrently = func(
 		}
 	}
 }
+
+// TODO: enhancements
+// Add per-bidder timeout: wrap each `b.Bid(req)` call in a `context.WithTimeout()`
+// Add metrics for:
+// -> number of responses received
+// -> timeout vs complete %
+// -> response latency per bidder
+// Return a struct: `[]*models.BidResponse, []error` if you'd like to expose partial errors
