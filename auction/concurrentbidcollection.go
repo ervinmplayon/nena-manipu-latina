@@ -9,6 +9,12 @@ import (
 	"time"
 )
 
+/*
+ * Why this is production-grade:
+ * Context-based timeout control
+ * Safe writes to channel
+ */
+
 var collectBidsConcurrently = func(
 	ctx context.Context,
 	bidders []bidder.Bidder,
@@ -26,7 +32,7 @@ var collectBidsConcurrently = func(
 			defer wg.Done()
 			resp, err := b.Bid(req)
 			if err != nil {
-				eight_ball_logger.Info(fmt.Sprintf("Concurrent Bid Collection - Bidder %s error: %v", b.Name(), err))
+				eight_ball_logger.Info(fmt.Sprintf("Concurrent Bid Collection: Bidder %s error: %v", b.Name(), err))
 				return
 			}
 			// ? Safe send with select - avoids panics is ctx is done
@@ -34,6 +40,7 @@ var collectBidsConcurrently = func(
 			case resCh <- &resp:
 			case <-ctx.Done():
 				// ? Too late to send, main process is aborting
+				eight_ball_logger.Info("Concurrent Bid Collection: <-ctx.Done() has been reached")
 			}
 		}(b)
 	}
