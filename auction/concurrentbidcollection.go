@@ -12,7 +12,9 @@ import (
 /*
  * Why this is production-grade:
  * Context-based timeout control
- * Safe writes to channel
+ * Safe writes to channel (avoids panics)
+ * Partial response collection (even if some bidders fail)
+ * Structured error logging per bidder (optional hook)
  */
 
 var collectBidsConcurrently = func(
@@ -30,6 +32,7 @@ var collectBidsConcurrently = func(
 		wg.Add(1)
 		go func(b bidder.Bidder) {
 			defer wg.Done()
+			// ? Optional: wrap the bidder call with per-bidder timeout if needed
 			resp, err := b.Bid(req)
 			if err != nil {
 				eight_ball_logger.Info(fmt.Sprintf("Concurrent Bid Collection: Bidder %s error: %v", b.Name(), err))
