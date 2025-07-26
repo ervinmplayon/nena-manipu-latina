@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
+	"strings"
 	"sync"
 	"time"
 )
@@ -21,32 +22,55 @@ import (
 */
 
 var collectBidsConcurrently = func(
-	ctx context.Context,
+	parentCtx context.Context,
 	bidders []bidder.Bidder,
 	req models.BidRequest,
 	timeout time.Duration,
-) []*models.BidResponse {
-	ctx, cancel := context.WithTimeout(ctx, timeout)
+	perBidderTimeout time.Duration,
+) models.BidCollectionResult {
+	ctx, cancel := context.WithTimeout(parentCtx, timeout)
 	defer cancel()
 	resCh := make(chan *models.BidResponse, len(bidders))
+	errCh := make(chan error, len(bidders))
 
 	var wg sync.WaitGroup
+	latencies := make(map[string]time.Duration)
+	latencyMu := sync.Mutex{}
 	for _, b := range bidders {
 		wg.Add(1)
 		go func(b bidder.Bidder) {
 			defer wg.Done()
-			// ? Optional: wrap the bidder call with per-bidder timeout if needed
+
+			bidderName := b.Name()
+			bidderCtx, bidderCancel := context.WithTimeout(ctx, perBidderTimeout)
+			defer bidderCancel()
+
+			start := time.Now()
 			resp, err := b.Bid(req)
-			if err != nil {
-				eight_ball_logger.Info(fmt.Sprintf("Concurrent Bid Collection: Bidder %s error: %v", b.Name(), err))
-				return
-			}
-			// ? Safe send with select - avoids panics is ctx is done
+			latency := time.Since(start)
+
 			select {
-			case resCh <- &resp:
-			case <-ctx.Done():
-				// ? Too late to send, main process is aborting
-				eight_ball_logger.Info("Concurrent Bid Collection: <-ctx.Done() has been reached")
+			case <-bidderCtx.Done():
+				// ? timeout case
+				errCh <- fmt.Errorf("bidder %s has timed out after %v", bidderName, perBidderTimeout)
+				eight_ball_logger.Info(fmt.Sprintf("bidder %s has timed out after %v", bidderName, perBidderTimeout))
+				return
+			default:
+				// ? check response
+				if err != nil {
+					errCh <- fmt.Errorf("bidder %s error: %w", bidderName, err)
+					eight_ball_logger.Info(fmt.Sprintf("bidder %s error: %w", bidderName, err))
+					return
+				}
+				latencyMu.Lock()
+				latencies[bidderName] = latency
+				latencyMu.Unlock()
+
+				select {
+				case resCh <- &resp:
+				case <-ctx.Done():
+					// ? Late response
+				}
 			}
 		}(b)
 	}
@@ -64,13 +88,14 @@ var collectBidsConcurrently = func(
 	case <-done:
 		// ? All responses collected
 		eight_ball_logger.Info("Concurrent Bid Collection: All bidders completed")
-	case <-time.After(timeout):
+	case <-ctx.Done():
 		// ? Time out waiting
 		eight_ball_logger.Info("Concurrent Bid Collection: Timeout has been reached")
 	}
 
 	// ? Drain the channel safely
 	var results []*models.BidResponse
+drainResponses:
 	for {
 		select {
 		case res := <-resCh:
@@ -79,15 +104,37 @@ var collectBidsConcurrently = func(
 			}
 		default:
 			// ? No more responses available
-			return results
+			break drainResponses
 		}
 	}
-}
 
-// TODO: enhancements
-// Add per-bidder timeout: wrap each `b.Bid(req)` call in a `context.WithTimeout()`
-// Add metrics for:
-// -> number of responses received
-// -> timeout vs complete %
-// -> response latency per bidder
-// Return a struct: `[]*models.BidResponse, []error` if you'd like to expose partial errors
+	var errors []error
+drainErrors:
+	for {
+		select {
+		case err := <-errCh:
+			errors = append(errors, err)
+		default:
+			break drainErrors
+		}
+	}
+
+	// ? Build metrics
+	metrics := models.BidCollectionMetrics{
+		TotalBidders:      len(bidders),
+		SuccessfulBids:    len(results),
+		ResponseLatencies: latencies,
+	}
+	for _, err := range errors {
+		if strings.Contains(err.Error(), "timed out") {
+			metrics.TimeoutBidders++
+		} else {
+			metrics.FailedBidders++
+		}
+	}
+	return models.BidCollectionResult{
+		Responses: results,
+		Errors:    errors,
+		Metrics:   metrics,
+	}
+}
