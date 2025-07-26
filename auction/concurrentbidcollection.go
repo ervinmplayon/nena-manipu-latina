@@ -138,3 +138,7 @@ drainErrors:
 		Metrics:   metrics,
 	}
 }
+
+// TODO:
+// * Adjust Auction() interface
+// * integrate with FirstResponder and Roundrobin
