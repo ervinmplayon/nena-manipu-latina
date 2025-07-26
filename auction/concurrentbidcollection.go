@@ -35,6 +35,7 @@ var collectBidsConcurrently = func(bidders []bidder.Bidder, req models.BidReques
 
 	var results []*models.AuctionResult
 	select {
+	// ? `<-done` is instantly successful once `close(done)` is called.
 	case <-done:
 		// ? All responses collected
 	case <-time.After(timeout):
