@@ -36,6 +36,7 @@ func (m *mockBidder) Bid(ctx context.Context, req models.BidRequest) (*models.Bi
 }
 
 func TestFirstResponder_AuctionWithContext(t *testing.T) {
+	// TODO
 	// * Arrange
 	// bidders := []bidder.Bidder{
 	// 	&mockBidder{name: "slow1", delay: 300 * time.Millisecond, shouldBid: true},
