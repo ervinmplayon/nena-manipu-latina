@@ -12,6 +12,7 @@ type AuctionStrategy interface {
 }
 
 // ? Pretty neat as this also returns partial errors
+// ? It is also a context-aware implementation
 type AuctionStrategyWithContext interface {
 	AuctionWithContext(ctx context.Context, bids []bidder.Bidder, req models.BidRequest) ([]*models.BidResponse, []error)
 }
