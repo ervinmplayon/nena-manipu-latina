@@ -62,6 +62,9 @@ var collectBidsConcurrently = func(
 					eight_ball_logger.Info(fmt.Sprintf("bidder %s error: %v", bidderName, err))
 					return
 				}
+				// TODO: investigate why if resp != nil is a type mismatch
+				// if resp != nil {
+				// }
 				latencyMu.Lock()
 				latencies[bidderName] = latency
 				latencyMu.Unlock()
