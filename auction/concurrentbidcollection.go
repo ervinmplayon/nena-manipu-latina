@@ -59,7 +59,7 @@ var collectBidsConcurrently = func(
 				// ? check response
 				if err != nil {
 					errCh <- fmt.Errorf("bidder %s error: %w", bidderName, err)
-					eight_ball_logger.Info(fmt.Sprintf("bidder %s error: %w", bidderName, err))
+					eight_ball_logger.Info(fmt.Sprintf("bidder %s error: %v", bidderName, err))
 					return
 				}
 				latencyMu.Lock()
