@@ -2,24 +2,4 @@
 // ? Picks the first valid bid
 package auction
 
-import (
-	"errors"
-	"nena-manipu-latina/bidder"
-	"nena-manipu-latina/models"
-)
-
 type FirstResponder struct{}
-
-// TODO: rewrite to include context passing. Apply the same to the Auction() interface
-func (fr *FirstResponder) Auction(bidders []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
-	// results := collectBidsConcurrently(bidders, req, 50*time.Millisecond)
-
-	// for _, res := range results {
-	// 	if res.Err == nil && res.Response != nil {
-	// 		eight_ball_logger.Info(fmt.Sprintf("First Responder: %s won the bid", res.Response.Bidder))
-	// 		return *res.Response, nil // * First valid response
-	// 	}
-	// }
-	// eight_ball_logger.Error("first responder: No valid bidder response")
-	return models.BidResponse{}, errors.New("first responder: No valid bidder response")
-}
