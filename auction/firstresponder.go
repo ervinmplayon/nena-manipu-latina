@@ -3,23 +3,43 @@
 package auction
 
 import (
+	"context"
 	"errors"
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
+	"time"
 )
 
-type FirstResponder struct{}
+type FirstResponder struct {
+	Timeout          time.Duration
+	PerBidderTimeout time.Duration
+}
 
-// TODO: rewrite to include context passing. Apply the same to the Auction() interface
-func (fr *FirstResponder) Auction(bidders []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
-	// results := collectBidsConcurrently(bidders, req, 50*time.Millisecond)
+func NewFirstResponder(timeout, perBidderTimeout time.Duration) *FirstResponder {
+	return &FirstResponder{
+		Timeout:          timeout,
+		PerBidderTimeout: perBidderTimeout,
+	}
+}
 
-	// for _, res := range results {
-	// 	if res.Err == nil && res.Response != nil {
-	// 		eight_ball_logger.Info(fmt.Sprintf("First Responder: %s won the bid", res.Response.Bidder))
-	// 		return *res.Response, nil // * First valid response
-	// 	}
-	// }
-	// eight_ball_logger.Error("first responder: No valid bidder response")
-	return models.BidResponse{}, errors.New("first responder: No valid bidder response")
+func (f *FirstResponder) AuctionWithContext(
+	ctx context.Context,
+	bidders []bidder.Bidder,
+	req models.BidRequest,
+) (*models.BidCollectionResult, error) {
+	result := collectBidsConcurrently(ctx, bidders, req, f.Timeout, f.PerBidderTimeout)
+
+	for _, bid := range result.Responses {
+		if bid != nil && bid.Bidder != "" {
+			// ? First successful bidder found
+			return &models.BidCollectionResult{
+				Responses: []*models.BidResponse{bid},
+				Errors:    result.Errors,
+				Metrics:   result.Metrics,
+			}, nil
+		}
+	}
+
+	eight_ball_logger.Error("first Responder: no bids received")
+	return nil, errors.New("first Responder: no bids received")
 }

@@ -59,9 +59,12 @@ var collectBidsConcurrently = func(
 				// ? check response
 				if err != nil {
 					errCh <- fmt.Errorf("bidder %s error: %w", bidderName, err)
-					eight_ball_logger.Info(fmt.Sprintf("bidder %s error: %w", bidderName, err))
+					eight_ball_logger.Info(fmt.Sprintf("bidder %s error: %v", bidderName, err))
 					return
 				}
+				// TODO: investigate why if resp != nil is a type mismatch
+				// if resp != nil {
+				// }
 				latencyMu.Lock()
 				latencies[bidderName] = latency
 				latencyMu.Unlock()
@@ -140,5 +143,4 @@ drainErrors:
 }
 
 // TODO:
-// * Adjust Auction() interface
-// * integrate with FirstResponder and Roundrobin
+// * integrate with Roundrobin
