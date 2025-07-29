@@ -2,4 +2,16 @@
 // ? Picks the first valid bid
 package auction
 
-type FirstResponder struct{}
+import "time"
+
+type FirstResponder struct {
+	Timeout          time.Duration
+	PerBidderTimeout time.Duration
+}
+
+func NewFirstResponder(timeout, perBidderTimeout time.Duration) *FirstResponder {
+	return &FirstResponder{
+		Timeout:          timeout,
+		PerBidderTimeout: perBidderTimeout,
+	}
+}
