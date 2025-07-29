@@ -140,5 +140,4 @@ drainErrors:
 }
 
 // TODO:
-// * Adjust Auction() interface
-// * integrate with FirstResponder and Roundrobin
+// * integrate with Roundrobin
