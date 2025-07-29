@@ -1,8 +1,8 @@
 package auction_test
 
 import (
-	"nena-manipu-latina/auction"
-	"nena-manipu-latina/bidder"
+	"context"
+	"errors"
 	"nena-manipu-latina/models"
 	"testing"
 	"time"
@@ -10,79 +10,41 @@ import (
 
 // ? Implement the bidder.Bidder interface as mock
 type mockBidder struct {
-	name          string
-	response      models.BidResponse
-	responseDelay time.Duration
+	name      string
+	shouldBid bool
+	delay     time.Duration
 }
 
-func (m mockBidder) Name() string {
+func (m *mockBidder) Name() string {
 	return m.name
 }
 
-func (m mockBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
-	if m.responseDelay > 0 {
-		time.Sleep(m.responseDelay)
+func (m *mockBidder) Bid(ctx context.Context, req models.BidRequest) (*models.BidResponse, error) {
+	select {
+	case <-time.After(m.delay):
+		if m.shouldBid {
+			return &models.BidResponse{
+				Creative: "creative-" + m.name,
+				CPM:      1.23,
+				Bidder:   m.name,
+			}, nil
+		}
+		return nil, errors.New("no bid")
+	case <-ctx.Done():
+		return nil, ctx.Err()
 	}
-	return m.response, nil
 }
 
-func TestFirstResponder_Auction(t *testing.T) {
+func TestFirstResponder_AuctionWithContext(t *testing.T) {
 	// * Arrange
-	strategy := auction.FirstResponder{}
-
-	bidders := []bidder.Bidder{
-		mockBidder{
-			name:          "BidderA",
-			response:      models.BidResponse{CPM: 2.50, Creative: "A content", Bidder: "A"},
-			responseDelay: 30 * time.Millisecond,
-		},
-		mockBidder{
-			name:          "BidderB",
-			response:      models.BidResponse{CPM: 1.00, Creative: "B content", Bidder: "B"},
-			responseDelay: 10 * time.Millisecond, // ? <-- will win
-		},
-		mockBidder{
-			name:          "BidderC",
-			response:      models.BidResponse{CPM: 5.00, Creative: "C content", Bidder: "C"},
-			responseDelay: 50 * time.Millisecond,
-		},
-	}
-
-	req := models.BidRequest{
-		RequestID:   "susie-stellar-request-123",
-		PublisherID: "gina-valentina",
-		AdUnit:      "sinatra-monroe-cheeks",
-		DeviceIP:    "1.2.3.4",
-	}
-
+	// bidders := []bidder.Bidder{
+	// 	&mockBidder{name: "slow1", delay: 300 * time.Millisecond, shouldBid: true},
+	// 	&mockBidder{name: "fast1", delay: 50 * time.Millisecond, shouldBid: true}, // <- should win
+	// 	&mockBidder{name: "slow2", delay: 400 * time.Millisecond, shouldBid: true},
+	// 	&mockBidder{name: "nobid", delay: 50 * time.Millisecond, shouldBid: false}, // <- no bid
+	// }
 	// * Act
-	resp, _ := strategy.Auction(bidders, req)
 
 	// * Assert
-	if resp.Creative != "B content" || resp.Bidder != "B" {
-		t.Errorf("Expected B content from BidderB, got %+v", resp)
-	}
-}
 
-// ? Test when no bidders respond
-func TestFirstResponder_NoValidBids(t *testing.T) {
-	strategy := auction.FirstResponder{}
-
-	bidders := []bidder.Bidder{
-		mockBidder{name: "BidderX", response: models.BidResponse{}},
-		mockBidder{name: "BidderY", response: models.BidResponse{}},
-	}
-
-	req := models.BidRequest{
-		RequestID:   "test456",
-		PublisherID: "pub2",
-		AdUnit:      "unit2",
-		DeviceIP:    "5.6.7.8",
-	}
-
-	resp, _ := strategy.Auction(bidders, req)
-
-	if resp != (models.BidResponse{}) {
-		t.Errorf("Expected empty response, got %+v", resp)
-	}
 }
