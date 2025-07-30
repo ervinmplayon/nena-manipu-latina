@@ -19,7 +19,7 @@ func (m *mockStrategy) Auction(bidders []bidder.Bidder, req models.BidRequest) (
 }
 
 // ? Override the Factory function for testing
-func mockFactory(strategyName string) (auction.AuctionStrategy, error) {
+func mockFactory(strategyName string) (auction.AuctionStrategyWithContext, error) {
 	return &mockStrategy{}, nil
 }
 
