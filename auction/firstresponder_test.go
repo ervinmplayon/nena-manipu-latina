@@ -3,9 +3,13 @@ package auction_test
 import (
 	"context"
 	"errors"
+	"nena-manipu-latina/auction"
+	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/assert"
 )
 
 // ? Implement the bidder.Bidder interface as mock
@@ -36,16 +40,35 @@ func (m *mockBidder) Bid(ctx context.Context, req models.BidRequest) (*models.Bi
 }
 
 func TestFirstResponder_AuctionWithContext(t *testing.T) {
-	// TODO
 	// * Arrange
-	// bidders := []bidder.Bidder{
-	// 	&mockBidder{name: "slow1", delay: 300 * time.Millisecond, shouldBid: true},
-	// 	&mockBidder{name: "fast1", delay: 50 * time.Millisecond, shouldBid: true}, // <- should win
-	// 	&mockBidder{name: "slow2", delay: 400 * time.Millisecond, shouldBid: true},
-	// 	&mockBidder{name: "nobid", delay: 50 * time.Millisecond, shouldBid: false}, // <- no bid
-	// }
+	bidders := []bidder.Bidder{
+		&mockBidder{name: "slow1", delay: 300 * time.Millisecond, shouldBid: true},
+		&mockBidder{name: "fast1", delay: 50 * time.Millisecond, shouldBid: true}, // <- should win
+		&mockBidder{name: "slow2", delay: 400 * time.Millisecond, shouldBid: true},
+		&mockBidder{name: "nobid", delay: 50 * time.Millisecond, shouldBid: false}, // <- no bid
+	}
+	req := models.BidRequest{
+		RequestID:   "test-auction",
+		PublisherID: "test-auction",
+	}
+
+	// * Set the parent timeout to be longer than per-bidder timeout
+	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	defer cancel()
+
+	strategy := auction.NewFirstResponder(2*time.Second, 2*time.Second)
+
 	// * Act
+	result, err := strategy.AuctionWithContext(ctx, bidders, req)
 
 	// * Assert
+	assert.NoError(t, err)
+	assert.NotNil(t, result)
 
+	assert.Len(t, result.Responses, 1)
+	assert.Equal(t, "fast1", result.Responses[0].Bidder)
+	assert.Equal(t, "creative-fast1", result.Responses[0].Creative)
+
+	t.Logf("Winner: %+v", result.Responses[0])
+	t.Logf("Errors: %+v", result.Errors)
 }
