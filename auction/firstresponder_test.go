@@ -56,7 +56,7 @@ func TestFirstResponder_AuctionWithContext(t *testing.T) {
 	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
 	defer cancel()
 
-	strategy := auction.NewFirstResponder(2*time.Second, 2*time.Second)
+	strategy := auction.FirstResponder{}
 
 	// * Act
 	result, err := strategy.AuctionWithContext(ctx, bidders, req)
