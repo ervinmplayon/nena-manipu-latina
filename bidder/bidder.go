@@ -7,5 +7,5 @@ import (
 
 type Bidder interface {
 	Name() string
-	Bid(ctx context.Context, req models.BidRequest) (models.BidResponse, error)
+	Bid(ctx context.Context, req models.BidRequest) (*models.BidResponse, error)
 }
