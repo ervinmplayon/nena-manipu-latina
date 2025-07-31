@@ -2,6 +2,7 @@
 package bidder
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"nena-manipu-latina/models"
@@ -16,12 +17,12 @@ type ChismosaBidder struct {
 
 // TODO: Properly implement bidder interface. Implement Name()
 
-func (cb *ChismosaBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
+func (cb *ChismosaBidder) Bid(ctx context.Context, req models.BidRequest) (*models.BidResponse, error) {
 	cb.Logger.Info("Processing bid request")
-	res, err := cb.Inner.Bid(req)
+	res, err := cb.Inner.Bid(ctx, req)
 	if err != nil {
 		cb.Logger.Error(fmt.Sprintf("ChismeBidder Error: %s", err))
-		return models.BidResponse{}, errors.New("chismosa Bidder Error")
+		return &models.BidResponse{}, errors.New("chismosa Bidder Error")
 	}
 	cb.Logger.Info("Returning bid response")
 	return res, nil

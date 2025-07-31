@@ -2,6 +2,7 @@
 package bidder
 
 import (
+	"context"
 	"errors"
 	"fmt"
 	"nena-manipu-latina/models"
@@ -14,17 +15,17 @@ type MinPriceBidder struct {
 
 // TODO: Properly implement bidder interface. Implement Name()
 
-func (m *MinPriceBidder) Bid(req models.BidRequest) (models.BidResponse, error) {
-	res, err := m.Inner.Bid(req)
+func (m *MinPriceBidder) Bid(ctx context.Context, req models.BidRequest) (*models.BidResponse, error) {
+	res, err := m.Inner.Bid(ctx, req)
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("Min Price Bidder: Error on Bid() %s", err))
-		return models.BidResponse{}, errors.New("min Price Bidder error on Bid()")
+		return &models.BidResponse{}, errors.New("min Price Bidder error on Bid()")
 	}
 
 	if res.CPM < m.MinPrice {
 		// Return empty response if invalid or too low. NOT AN ERROR
 		eight_ball_logger.Info(fmt.Sprintf("Min Price Bidder: Too cheap damn it. Min Price is %v, CPM is %v", m.MinPrice, res.CPM))
-		return models.BidResponse{}, nil
+		return &models.BidResponse{}, nil
 	}
 	return res, nil
 }

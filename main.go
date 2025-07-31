@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
 	"nena-manipu-latina/auction"
@@ -40,7 +41,7 @@ func handleAdRequest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// ? Auction entry point
-	adResp, err := auction.RunAuction(pubConfig.Bidders, pubConfig.Strategy, adReq)
+	adResp, err := auction.RunAuction(context.TODO(), pubConfig.Bidders, pubConfig.Strategy, adReq)
 	if err != nil {
 		eight_ball_logger.Error(fmt.Sprintf("Auction failed: %v", err))
 		http.Error(w, "No ad available", http.StatusNoContent)

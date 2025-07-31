@@ -46,7 +46,7 @@ var collectBidsConcurrently = func(
 			defer bidderCancel()
 
 			start := time.Now()
-			resp, err := b.Bid(req)
+			resp, err := b.Bid(bidderCtx, req)
 			latency := time.Since(start)
 
 			select {
@@ -70,7 +70,7 @@ var collectBidsConcurrently = func(
 				latencyMu.Unlock()
 
 				select {
-				case resCh <- &resp:
+				case resCh <- resp:
 				case <-ctx.Done():
 					// ? Late response
 				}
@@ -141,6 +141,3 @@ drainErrors:
 		Metrics:   metrics,
 	}
 }
-
-// TODO:
-// * integrate with Roundrobin
