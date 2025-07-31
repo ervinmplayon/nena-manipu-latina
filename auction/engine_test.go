@@ -1,6 +1,7 @@
 package auction_test
 
 import (
+	"context"
 	"nena-manipu-latina/auction"
 	"nena-manipu-latina/bidder"
 	"nena-manipu-latina/models"
@@ -11,10 +12,15 @@ import (
 // ? Define mock strategy for testing
 type mockStrategy struct{}
 
-func (m *mockStrategy) Auction(bidders []bidder.Bidder, req models.BidRequest) (models.BidResponse, error) {
-	return models.BidResponse{
+func (m *mockStrategy) AuctionWithContext(ctx context.Context, bidders []bidder.Bidder, req models.BidRequest) (*models.BidCollectionResult, error) {
+	mockResponse := models.BidResponse{
 		Bidder: "TestDSP",
 		CPM:    1.23,
+	}
+	return &models.BidCollectionResult{
+		Responses: []*models.BidResponse{&mockResponse},
+		Errors:    nil,
+		Metrics:   models.BidCollectionMetrics{},
 	}, nil
 }
 
@@ -36,9 +42,9 @@ func TestRunAuction_ReturnsExpectedResponse(t *testing.T) {
 
 	// * Call RunAuction
 	req := models.BidRequest{AdUnit: "banner"}
-	resp, _ := auction.RunAuction(bidders, "any-strategy", req)
+	resp, _ := auction.RunAuction(context.Background(), bidders, "any-strategy", req)
 
-	if resp.Bidder != "TestDSP" || resp.CPM != 1.23 {
+	if resp.Responses[0].Bidder != "TestDSP" || resp.Responses[0].CPM != 1.23 {
 		t.Errorf("Unexpected auction result: %+v", resp)
 	}
 }
