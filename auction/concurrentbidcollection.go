@@ -141,6 +141,3 @@ drainErrors:
 		Metrics:   metrics,
 	}
 }
-
-// TODO:
-// * integrate with Roundrobin
