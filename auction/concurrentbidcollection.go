@@ -46,7 +46,7 @@ var collectBidsConcurrently = func(
 			defer bidderCancel()
 
 			start := time.Now()
-			resp, err := b.Bid(ctx, req)
+			resp, err := b.Bid(bidderCtx, req)
 			latency := time.Since(start)
 
 			select {

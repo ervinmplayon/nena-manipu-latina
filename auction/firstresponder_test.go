@@ -53,7 +53,7 @@ func TestFirstResponder_AuctionWithContext(t *testing.T) {
 	}
 
 	// * Set the parent timeout to be longer than per-bidder timeout
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(t.Context(), 150*time.Millisecond)
 	defer cancel()
 
 	strategy := &auction.FirstResponder{}
