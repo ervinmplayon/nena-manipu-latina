@@ -12,11 +12,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-// ? Implement the bidder.Bidder interface as mock
 type mockBidder struct {
-	name      string
-	shouldBid bool
-	delay     time.Duration
+	name       string
+	delay      time.Duration
+	resp       *models.BidResponse
+	err        error
+	shouldHang bool
 }
 
 func (m *mockBidder) Name() string {
@@ -24,16 +25,14 @@ func (m *mockBidder) Name() string {
 }
 
 func (m *mockBidder) Bid(ctx context.Context, req models.BidRequest) (*models.BidResponse, error) {
+	if m.shouldHang {
+		<-ctx.Done()
+		return nil, ctx.Err()
+	}
+
 	select {
 	case <-time.After(m.delay):
-		if m.shouldBid {
-			return &models.BidResponse{
-				Creative: "creative-" + m.name,
-				CPM:      1.23,
-				Bidder:   m.name,
-			}, nil
-		}
-		return nil, errors.New("no bid")
+		return m.resp, m.err
 	case <-ctx.Done():
 		return nil, ctx.Err()
 	}
@@ -42,33 +41,50 @@ func (m *mockBidder) Bid(ctx context.Context, req models.BidRequest) (*models.Bi
 func TestFirstResponder_AuctionWithContext(t *testing.T) {
 	// * Arrange
 	bidders := []bidder.Bidder{
-		&mockBidder{name: "slow1", delay: 300 * time.Millisecond, shouldBid: true},
-		&mockBidder{name: "fast1", delay: 50 * time.Millisecond, shouldBid: true}, // <- should win
-		&mockBidder{name: "slow2", delay: 400 * time.Millisecond, shouldBid: true},
-		&mockBidder{name: "nobid", delay: 50 * time.Millisecond, shouldBid: false}, // <- no bid
+		&mockBidder{
+			name:  "fast_success",
+			delay: 10 * time.Millisecond,
+			resp: &models.BidResponse{
+				Bidder: "fast_success",
+			},
+		},
+		&mockBidder{
+			name:  "slow_success",
+			delay: 200 * time.Millisecond,
+			resp: &models.BidResponse{
+				Bidder: "slow_success",
+			},
+		},
+		&mockBidder{
+			name:  "error_bidder",
+			delay: 50 * time.Millisecond,
+			err:   errors.New("some error"),
+		},
+		&mockBidder{
+			name:       "hanging_bidder",
+			shouldHang: true,
+		},
 	}
+
+	timeout := 300 * time.Millisecond
+	perBidderTimeout := 100 * time.Millisecond
+	strategy := auction.NewFirstResponder(timeout, perBidderTimeout)
+
+	ctx := context.Background()
 	req := models.BidRequest{
 		RequestID:   "test-auction",
 		PublisherID: "test-auction",
 	}
 
-	// * Set the parent timeout to be longer than per-bidder timeout
-	ctx, cancel := context.WithTimeout(t.Context(), 150*time.Millisecond)
-	defer cancel()
-
-	strategy := &auction.FirstResponder{}
-
-	// * Act
 	result, err := strategy.AuctionWithContext(ctx, bidders, req)
 
-	// * Assert
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
-
 	assert.Len(t, result.Responses, 1)
-	assert.Equal(t, "fast1", result.Responses[0].Bidder)
-	assert.Equal(t, "creative-fast1", result.Responses[0].Creative)
+	assert.Equal(t, "fast_success", result.Responses[0].Bidder)
 
-	t.Logf("Winner: %+v", result.Responses[0])
-	t.Logf("Errors: %+v", result.Errors)
+	assert.True(t, result.Metrics.TotalBidders == 4)
+	assert.True(t, result.Metrics.SuccessfulBids == 1)
+	assert.True(t, result.Metrics.TimeoutBidders >= 1) // hanging bidder
+	assert.True(t, result.Metrics.FailedBidders >= 1)  // error_bidder
 }
