@@ -76,8 +76,10 @@ func TestFirstResponder_AuctionWithContext(t *testing.T) {
 		PublisherID: "test-auction",
 	}
 
+	// * Act
 	result, err := strategy.AuctionWithContext(ctx, bidders, req)
 
+	// * Assert
 	assert.NoError(t, err)
 	assert.NotNil(t, result)
 	assert.Len(t, result.Responses, 1)
@@ -85,6 +87,6 @@ func TestFirstResponder_AuctionWithContext(t *testing.T) {
 
 	assert.True(t, result.Metrics.TotalBidders == 4)
 	assert.True(t, result.Metrics.SuccessfulBids == 1)
-	assert.True(t, result.Metrics.TimeoutBidders >= 1) // hanging bidder
-	assert.True(t, result.Metrics.FailedBidders >= 1)  // error_bidder
+	assert.True(t, result.Metrics.TimeoutBidders >= 1) // ? hanging bidder
+	assert.True(t, result.Metrics.FailedBidders >= 1)  // ? error_bidder
 }
