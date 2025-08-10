@@ -15,16 +15,16 @@ var defaultMockBidders = []Bidder{
  * Factory returns a list of bidders based on a publisher ID.
  * For now, it's hardcoded, later query a DB or config service.
  */
-func Factory(publisherID string) []Bidder {
+var Factory = func(publisherID string) []Bidder {
 	switch publisherID {
 	case "publisher_firstresponder":
-		eight_ball_logger.Info("Bidder Strategy Factory: Selected FirstResponder")
+		eight_ball_logger.Info("Bidder Strategy Factory: Selected FirstResponder Bidders")
 		return []Bidder{
 			NewMockBidder("FastDSP", 20*time.Millisecond, 1.05),
 			NewMockBidder("ReliableDSP", 40*time.Millisecond, 1.10),
 		}
 	case "publisher_roundrobin":
-		eight_ball_logger.Info("Bidder Strategy Factory: Selected RoundRobin")
+		eight_ball_logger.Info("Bidder Strategy Factory: Selected RoundRobin Bidders")
 		return []Bidder{
 			NewMockBidder("SlowAssBidder", 100*time.Millisecond, 0.99),
 			NewMockBidder("AggressiveDSP", 50*time.Millisecond, 1.30),

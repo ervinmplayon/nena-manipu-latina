@@ -12,6 +12,7 @@ type PublisherConfig struct {
 }
 
 // ? Fake static config mapping (can later be replaced by DB or Redis)
+// ? Keep in mind that each publisher can opt to change strategies too.
 var publisherConfigs = map[string]PublisherConfig{
 	"publisher_firstresponder": {
 		Strategy: auction.FirstResponderStrategy,

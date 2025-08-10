@@ -144,6 +144,7 @@ The initial version will support:
 ## Pre-MVP 
 - [ ] DSP option: config file `bidders.json` then load bidder config from this file
 - [x] HTTP-based bidder clients
+- [ ] Include HTTP bidders in factory
 - [ ] Replace hardcoded bidders with mock DSPs (for testing)
 - [ ] External DSP call with timeout
 - [ ] Ad endpoint for publisher
